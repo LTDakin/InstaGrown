@@ -3,61 +3,44 @@
 <!--
   Author: Nicholas Eng
 
-  Contains the html for the login page of PA10-Ostaa.
-  Has input fields for logging in and creating an account.
+  Contains the html for the login page of the Final Project.
+  Has input fields for logging in a button that takes the user to
+  an account creation page.
 -->
 
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Final Project</title>
+    <title>InstaGrow</title>
     <link rel = "stylesheet"
           type= "text/css"
-          href= "./style.css">
+          href= "./css/index.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="client.js"></script>
   </head>
   <body>
-    <div id="siteHeader">
-      <div id="headerTitle">NAMEHERE</div>
+	<div id="siteHeader">
+		<h1 id="headerTitle">InstaGrow</h1>
     </div>
-    <div id="index">
-      <div class= "headerDiv" id = "logIn">
-        <h1 class = "titleDiv">Login:</h1>
-        <div class = "inputDiv">
-          <label for="username">Username: </label>
-          <input name = username id = "username"
-          type = "text" required/>
-        </div>
-        <br>
-        <div class = "inputDiv">
-          <label for="password">Password: </label>
-          <input name = password id = "password"
-          type = "password" required/>
-        </div>
-        <br>
-        <input type = "submit" Value = "Log In" class = "submit"
-        onclick="login();"/>
-      </div>
- 
-
-      <div class= "headerDiv" id = "inputUser">
-        <h1 class = "titleDiv">Create Account:</h1>
-        <div class = "inputDiv">
-          <label for="username">Username: </label>
-          <input name = username id = "newUsername"
-          type = "text" required/>
-        </div>
-        <br>
-        <div class = "inputDiv">
-          <label for="password">Password: </label>
-          <input name = password id = "newPassword"
-          type = "password" required/>
-        </div>
-        <br>
-        <input type = "submit" Value = "Create Account" class = "submit"
-        onclick = "addUser();"/>
-      </div>
-    </div>
+    
+    <div id="siteContent">
+	    <div class= "loginDiv" id = "logIn">
+			<h1 class = "titleDiv">Login:</h1>
+	    <div class = "inputDiv">
+			<label for="username">Username: </label>
+			<input name = username id = "username"
+			type = "text" required/>
+	    </div>
+	    <br>
+	    <div class = "inputDiv">
+			<label for="password">Password: </label>
+			<input name = password id = "password"
+			type = "password" required/>
+	    </div>
+	    <br>
+	    <input type = "submit" Value = "Log In" class = "submit" onclick="login();"/>
+	    <br><br>
+		<input type="button" value="Create an account" onclick="createAccountPage();">
+	</div>
   </body>
 </html>
