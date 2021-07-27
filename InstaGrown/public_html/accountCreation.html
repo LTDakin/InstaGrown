@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<!--
+  Author: Nicholas Eng
+
+  Contains the html for the home page of the Final Project.
+-->
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>InstaGrow</title>
+    <link rel = "stylesheet"
+          type= "text/css"
+          href= "./css/accountCreation.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="client.js"></script>
+  </head>
+  <body>
+	<div id="siteHeader">
+		<h1 id="headerTitle">InstaGrow</h1>
+    </div>
+    
+    <div id="siteContent">
+		<div class="formInput">
+        	<label for="userName">Username: </label>
+        	<input type = "text" name = userName id = "userNameInput"/>
+		</div>
+		
+		<div class="formInput">
+        	<label for="password">Password: </label>
+        	<input type = "password" name = password id = "passwordInput"/>
+		</div>
+		
+    	<div class="formInput">
+        	<label for="email">Email: </label>
+        	<input type = "email" name = email id = "emailInput"/>
+		</div>
+		
+		<div class="formInput">
+        	<label for="status">Status: </label>
+        	<input type = "text" name = status id = "statusInput"/>
+		</div>
+		
+      	<div class="formInput">
+			<div>Enter bio here: </div>
+			<textarea name="bio" id = "bio" rows="5"></textarea>
+		</div>
+		
+    	<div class="formInput">
+    		<input type = "submit" Value = "Create Account" class = "submit"/>
+    	</div>
+    </div>
+  </body>
+</html>
