@@ -37,7 +37,7 @@ var UserSchema = new Schema({
 
 //Post Schema
 var PostSchema = new Schema({
-    Poster: UserSchema,
+    //Poster: UserSchema, // maybe uncomment later?
     Content: String,
     Image: String, //TODO how to implement images
     Comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
@@ -199,7 +199,27 @@ app.post("/share/post", (req, res) => {
 
 //creates a new post from the user
 app.post("/create/post", (req, res) => {
+  userN = req.cookies.login.username;
+  // searches for username
+  Users.find({Username:userN}).exec(function(error, results) {
+    if (results.length == 1) {
+      // creates and saves post
+      let postString = JSON.parse(req.body.Post);
+      var newPost = new Post(postString);
+      newPost.save(function (err) { if (err) console.log("ERROR");});
 
+      // updates user's array of posts
+      db.collection("users").update(//collection name?
+        { Username: userN },
+        { $push: { Posts: newPost } }
+      );
+      res.end("GOOD");
+
+    // if no username matches, send no such username
+    } else {
+      res.end("No such username");
+    }
+  });
 });
 
 //updates the users bio
