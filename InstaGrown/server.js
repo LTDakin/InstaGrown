@@ -46,7 +46,7 @@ var PostSchema = new Schema({
 
 //Comment Schema
 var CommentSchema = new Schema({
-    Poster: UserSchema,
+    //Poster: UserSchema,
     Content: String,
     Likes: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 });
@@ -203,6 +203,19 @@ app.post("/create/post", (req, res) => {
   // searches for username
   Users.find({Username:userN}).exec(function(error, results) {
     if (results.length == 1) {
+      postsList = results[0].Posts;
+      res.end(JSON.stringify(postsList,null,4));
+    // if no username matches, send no such username
+    } else {
+      res.end("BAD");
+    }
+  });
+});
+
+app.get("/get/posts", (req, res) => {
+  userN = req.cookies.login.username;
+  Users.find({Username:userN}).exec(function(error, results) {
+    if (results.length == 1) {
       // creates and saves post
       let postString = JSON.parse(req.body.Post);
       var newPost = new Post(postString);
@@ -214,13 +227,13 @@ app.post("/create/post", (req, res) => {
         { $push: { Posts: newPost } }
       );
       res.end("GOOD");
-
     // if no username matches, send no such username
     } else {
       res.end("No such username");
     }
   });
 });
+
 
 //updates the users bio
 app.post("/update/bio", (req, res) => {
