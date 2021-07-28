@@ -1,10 +1,11 @@
 createPost() {
   // gets post body
   var postText = document.getElementById("post").value;
+  var postTitle = document.getElementById("title").value;
 
   // creates post according to schema in server.js
   //post = {Poster: "", Content: d, Image: "", Comments: [], Likes: []};
-  post = {Content: d, Image: "", Comments: [], Likes: []};
+  post = {Title : postTitle , Content: postText, Image: "", Comments: [], Likes: []};
   post_str = JSON.stringify(post);
   params = "Post="+post_str;
 

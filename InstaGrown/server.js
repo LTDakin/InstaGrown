@@ -38,6 +38,7 @@ var UserSchema = new Schema({
 //Post Schema
 var PostSchema = new Schema({
     //Poster: UserSchema, // maybe uncomment later?
+    Title: String,
     Content: String,
     Image: String, //TODO how to implement images
     Comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
@@ -168,8 +169,18 @@ app.get("/search/posts/", (req, res) => {
 });
 
 //adds a comment to a post
-app.post("/comment/post/", (req, res) => {
-
+//app.post("/comment/post/:title/:content", (req, res) => {
+app.post("/comment/post/:title", (req, res) => {
+  let t = req.params.title;
+  userN = req.cookies.login.username;
+  let commentString = JSON.parse(req.body.Post);
+  var newComment = new Post(commentString);
+  Post.find({ Title: t}).exec(function (error, results) {
+    db.collection("posts").update(
+      { Title: t },
+      { $push: { comments: newComment } } );
+      res.end("");
+  });
 });
 
 //returns a user's profile
@@ -198,7 +209,7 @@ app.post("/share/post", (req, res) => {
 });
 
 //creates a new post from the user
-app.post("/create/post", (req, res) => {
+app.post("/get/posts", (req, res) => {
   userN = req.cookies.login.username;
   // searches for username
   Users.find({Username:userN}).exec(function(error, results) {
@@ -212,7 +223,7 @@ app.post("/create/post", (req, res) => {
   });
 });
 
-app.get("/get/posts", (req, res) => {
+app.get("/create/post", (req, res) => {
   userN = req.cookies.login.username;
   Users.find({Username:userN}).exec(function(error, results) {
     if (results.length == 1) {
