@@ -94,11 +94,29 @@ populateFriendsList();
 
 
 searchUsers() {
-  // create object and ajax request
+  name = document.getElementById("searchName").innerText;
+  var searchObj = {
+     username: name
+  };
+  $.ajax({
+    url: "/search/user",
+    method: "GET",
+    data: searchObj,
+    success: function(result) {}
+  });
 }
 
 searchPosts() {
-
+  post = document.getElementById("searchPost").innerText;
+  var searchObj = {
+     keyword: key
+  };
+  $.ajax({
+    url: "/search/posts",
+    method: "GET",
+    data: searchObj,
+    success: function(result) {}
+  });
 }
 
 function timeUpdate() {
