@@ -75,16 +75,14 @@ app.post("/login/user/", (req, res) => {
     var user = userObj.username;
     var pass = userObj.password;
     //Check if user already exists if not or pass wrong return error
-    User.find({ username: user }).exec(function (error, results) {
+    User.find({ username: user }).exec(function(error, results) {
         if (results.length == 0) {
             res.end(JSON.stringify({ text: 'error' }));
-        }
-        else {
+        } else {
             //check if password matches
             if (results[0].password != pass) {
                 res.end(JSON.stringify({ text: 'error' }));
-            }
-            else {
+            } else {
                 //add cookie for login 10 min timer
                 res.cookie("login", { username: user }, { maxAge: 900000 });
                 console.log("login successful!")
@@ -106,7 +104,7 @@ app.post("/add/user/", (req, res) => {
     var email = userObj.email;
 
     //Check if user already exists
-    User.find({ username: user }).exec(function (error, results) {
+    User.find({ username: user }).exec(function(error, results) {
         //create the account
         if (results.length == 0) {
             var newUser = new User({
@@ -117,14 +115,14 @@ app.post("/add/user/", (req, res) => {
                 Friends: [],
                 Posts: []
             });
-            newUser.save(function (err) { if (err) console.log("error occured saving to db"); });
+            newUser.save(function(err) { if (err) console.log("error occured saving to db"); });
             console.log('user created!');
             res.end(JSON.stringify({ text: 'User created!' }));
         }
         //user exists, send error
         else {
             console.log('user already exists!');
-            res.end(JSON.stringify({ text: 'User already exists, please choose a different username' }));
+            res.end(JSON.stringify({ text: 'error' }));
         }
     });
 });
@@ -139,7 +137,7 @@ app.get("/search/user/", (req, res) => {
     user = searchObj.username;
 
     //search database and return list of users
-    User.find({ username: user }).exec(function (error, results) {
+    User.find({ username: user }).exec(function(error, results) {
         var result = [];
         for (var i = 0; i < results.length; i++) {
             //add user to list of found users
@@ -157,7 +155,7 @@ app.get("/search/posts/", (req, res) => {
     key = searchObj.keyword;
 
     //search database and return list of posts whose content contains key
-    Post.find({ Content: new RegExp(req.params.key, "i") }).exec(function (error, results) {
+    Post.find({ Content: new RegExp(req.params.key, "i") }).exec(function(error, results) {
         var result = [];
         for (var i = 0; i < results.length; i++) {
             //add post to list of found posts
@@ -177,9 +175,60 @@ app.get("/get/user/profile", (req, res) => {
 
 });
 
+//returns a list of user's friends
+app.get('/get/user/friends', (req, res) => {
+    //get user from cookies
+    var user = req.cookies.login.username;
+
+    //Search for user to get their friends data
+    User.find({ username: user }).populate("Friends").exec(function(error, results) {
+        if (results.length == 0) {
+            console.log("username from cookies " + user + " not found in database");
+            res.end(JSON.stringify({ text: 'error' }));
+        } else {
+            userData = results[0];
+            var result = '';
+            for (var i = 0; userData.Friends.length; i++) {
+                result += userData.Friends[i];
+            }
+            //return the list of friends
+            res.end(JSON.stringify(result, null, 2));
+        }
+    });
+});
+
 //adds a user as a friend
 app.get("/add/user/friend", (req, res) => {
+    //parse JSON object store data
+    var friendObj = JSON.parse(req.body.friendObjStr);
+    var name = friendObj.friendName;
 
+    //get user from cookies
+    var user = req.cookies.login.username;
+
+    //Search for user to get their data
+    User.find({ username: user }).exec(function(error, results) {
+        if (results.length == 0) {
+            console.log("username from cookies " + user + " not found in database");
+            res.end(JSON.stringify({ text: 'error' }));
+        } else {
+            userData = results[0];
+
+            //Search for the friend user is trying to add
+            User.find({ username: name }).exec(function(error, results) {
+                if (results.length == 0) {
+                    console.log("friend name " + name + " not found");
+                    res.end(JSON.stringify({ text: 'error' }));
+                } else {
+                    //add to friends list and re-save into database
+                    userData.Friends.push(results[0]._id);
+                    userData.save(function(err) {
+                        if (err) console.log("error occured saving to db");
+                    });
+                }
+            });
+        }
+    });
 });
 
 //adds a like to a post
@@ -204,7 +253,27 @@ app.post("/create/post", (req, res) => {
 
 //updates the users bio
 app.post("/update/bio", (req, res) => {
+    //get user from cookies
+    var user = req.cookies.login.username;
 
+    //parse JSON object store data
+    var bioObj = JSON.parse(req.body.bioObjStr);
+    var bio = bioObj.bio;
+
+    //Search for user to update their bio
+    User.find({ username: user }).exec(function(error, results) {
+        if (results.length == 0) {
+            console.log("username from cookies " + user + " not found in database");
+            res.end(JSON.stringify({ text: 'error' }));
+        } else {
+            //update the bio and save back into DB
+            userData = results[0];
+            userData.Bio = bio;
+            userData.save(function(err) {
+                if (err) console.log("error occured saving to db");
+            });
+        }
+    });
 });
 
 //chats.html requests---------------------------------------------------------------------
@@ -212,6 +281,13 @@ app.post("/update/bio", (req, res) => {
 //sends a specified user a message
 app.post("/send/user/message", (reg, res) => {
 
+});
+
+//~~~~~~~~~~~~~~~~~~Misc requests 
+
+//return the current user based on client's cookie
+app.get('/get/username/', (req, res) => {
+    res.end(JSON.stringify({ text: req.cookies.login.username }));
 });
 
 /*    FUNCTIONS   */

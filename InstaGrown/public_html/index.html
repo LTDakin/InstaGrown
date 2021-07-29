@@ -9,38 +9,38 @@
 -->
 
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <title>InstaGrow</title>
-    <link rel = "stylesheet"
-          type= "text/css"
-          href= "./css/index.css">
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="client.js"></script>
-  </head>
-  <body>
-	<div id="siteHeader">
-		<h1 id="headerTitle">InstaGrow</h1>
+    <script src="index.js"></script>
+</head>
+
+<body>
+    <div id="siteHeader">
+        <h1 id="headerTitle">InstaGrow</h1>
     </div>
-    
+
     <div id="siteContent">
-	    <div class= "loginDiv" id = "logIn">
-			<h1 class = "titleDiv">Login:</h1>
-	    <div class = "inputDiv">
-			<label for="username">Username: </label>
-			<input name = username id = "username"
-			type = "text" required/>
-	    </div>
-	    <br>
-	    <div class = "inputDiv">
-			<label for="password">Password: </label>
-			<input name = password id = "password"
-			type = "password" required/>
-	    </div>
-	    <br>
-	    <input type = "submit" Value = "Log In" class = "submit" onclick="login();"/>
-	    <br><br>
-		<input type="button" value="Create an account" onclick="createAccountPage();">
-	</div>
-  </body>
+        <div class="loginDiv" id="logIn">
+            <h1 class="titleDiv">Login:</h1>
+            <div class="inputDiv">
+                <label for="username">Username: </label>
+                <input name=username id="username" type="text" required/>
+            </div>
+            <br>
+            <div class="inputDiv">
+                <label for="password">Password: </label>
+                <input name=password id="password" type="password" required/>
+            </div>
+            <br>
+            <input type="button" Value="Log In" class="submit" onclick="login();" />
+            <br><br>
+            <input type="button" value="Create an account" onclick="createAccountPage();">
+            <p id="errorLogin">Incorrect Login!</p>
+        </div>
+</body>
+
 </html>
