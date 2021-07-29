@@ -37,7 +37,8 @@ var UserSchema = new Schema({
 
 //Post Schema
 var PostSchema = new Schema({
-    Poster: UserSchema,
+    //Poster: UserSchema, // maybe uncomment later?
+    Title: String,
     Content: String,
     Image: String, //TODO how to implement images
     Comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
@@ -46,7 +47,7 @@ var PostSchema = new Schema({
 
 //Comment Schema
 var CommentSchema = new Schema({
-    Poster: UserSchema,
+    //Poster: UserSchema,
     Content: String,
     Likes: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 });
@@ -166,8 +167,18 @@ app.get("/search/posts/", (req, res) => {
 });
 
 //adds a comment to a post
-app.post("/comment/post/", (req, res) => {
-
+//app.post("/comment/post/:title/:content", (req, res) => {
+app.post("/comment/post/:title", (req, res) => {
+  let t = req.params.title;
+  userN = req.cookies.login.username;
+  let commentString = JSON.parse(req.body.Post);
+  var newComment = new Post(commentString);
+  Post.find({ Title: t}).exec(function (error, results) {
+    db.collection("posts").update(
+      { Title: t },
+      { $push: { comments: newComment } } );
+      res.end("");
+  });
 });
 
 //returns a user's profile
@@ -247,9 +258,42 @@ app.post("/share/post", (req, res) => {
 });
 
 //creates a new post from the user
-app.post("/create/post", (req, res) => {
-
+app.post("/get/posts", (req, res) => {
+  userN = req.cookies.login.username;
+  // searches for username
+  Users.find({Username:userN}).exec(function(error, results) {
+    if (results.length == 1) {
+      postsList = results[0].Posts;
+      res.end(JSON.stringify(postsList,null,4));
+    // if no username matches, send no such username
+    } else {
+      res.end("BAD");
+    }
+  });
 });
+
+app.get("/create/post", (req, res) => {
+  userN = req.cookies.login.username;
+  Users.find({Username:userN}).exec(function(error, results) {
+    if (results.length == 1) {
+      // creates and saves post
+      let postString = JSON.parse(req.body.Post);
+      var newPost = new Post(postString);
+      newPost.save(function (err) { if (err) console.log("ERROR");});
+
+      // updates user's array of posts
+      db.collection("users").update(//collection name?
+        { Username: userN },
+        { $push: { Posts: newPost } }
+      );
+      res.end("GOOD");
+    // if no username matches, send no such username
+    } else {
+      res.end("No such username");
+    }
+  });
+});
+
 
 //updates the users bio
 app.post("/update/bio", (req, res) => {
