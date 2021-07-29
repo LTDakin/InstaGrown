@@ -33,3 +33,7 @@ function login() {
         }
     });
 }
+
+function createAccountPage() {
+    window.location == "/accountCreation.html";
+}
