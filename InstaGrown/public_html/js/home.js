@@ -90,9 +90,6 @@ function updateBio() {
 }
 
 /* RUNTIME */
-populateFriendsList();
-
-
 searchUsers() {
   name = document.getElementById("searchName").innerText;
   var searchObj = {
@@ -177,3 +174,4 @@ function fetchMessages(){
 
 // calls timeUpdate(), which updates the posts every 1 second.
 timeUpdate();
+populateFriendsList();
