@@ -117,7 +117,8 @@ function searchPosts() {
 }
 
 function timeUpdate() {
-    setInterval(fetchMessages, 1000);
+    setInterval(populatePosts, 1000);
+    setInterval(populateFriendsList, 1000);
 }
 
 function comment() {
@@ -142,7 +143,7 @@ function comment() {
     });
 }
 
-function fetchMessages() {
+function populatePosts() {
     $.ajax({
         url: "/get/posts",
         method: "GET",
