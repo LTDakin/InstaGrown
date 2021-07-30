@@ -137,8 +137,10 @@ app.get("/search/user/", (req, res) => {
     searchObj = JSON.parse(req.body.searchObjStr);
     user = searchObj.username;
 
+    console.log("searching user with key " + user);
+
     //search database and return list of users
-    User.find({ username: user }).exec(function(error, results) {
+    User.find({ username: new RegExp(user, "i") }).exec(function(error, results) {
         var result = [];
         for (var i = 0; i < results.length; i++) {
             //add user to list of found users
@@ -155,8 +157,10 @@ app.get("/search/posts/", (req, res) => {
     searchObj = JSON.parse(req.body.searchObjStr);
     key = searchObj.keyword;
 
+    console.log("searching post with key " + key);
+
     //search database and return list of posts whose content contains key
-    Post.find({ Content: new RegExp(req.params.key, "i") }).exec(function(error, results) {
+    Post.find({ Content: new RegExp(key, "i") }).exec(function(error, results) {
         var result = [];
         for (var i = 0; i < results.length; i++) {
             //add post to list of found posts

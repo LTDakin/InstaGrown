@@ -173,6 +173,50 @@ function populatePosts() {
     });
 }
 
+//searches for either users or posts and displays
+function search() {
+    console.log("search() being called");
+
+    var option = $('#searchOption').val();
+    var key = $('#searchKey').val();
+
+    console.log("Searching with option " + option + " and key " + keyword)
+
+    if (option == "users") {
+        //create a JSON obj
+        var searchObj = { username = key };
+        var searchObj_str = JSON.stringify(searchObj);
+
+        $.ajax({
+            url: '/search/user/',
+            method: 'GET',
+            data: { searchObjStr: searchObj_str },
+            success: function(res) {
+                var result = JSON.parse(res);
+                //display the users returned in middle section
+                console.log(result);
+            }
+        });
+    } else if (option == "posts") {
+        //create a JSON obj
+        var searchObj = { keyword = key };
+        var searchObj_str = JSON.stringify(searchObj);
+
+        $.ajax({
+            url: '/search/posts/',
+            method: 'GET',
+            data: { searchObjStr: searchObj_str },
+            success: function(res) {
+                var result = JSON.parse(res);
+                //display the posts returned in middle section
+                console.log(result);
+            }
+        });
+    } else {
+        alert("error");
+    }
+}
+
 // calls timeUpdate(), which updates the posts every 1 second.
 timeUpdate();
 populateFriendsList();
