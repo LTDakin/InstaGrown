@@ -8,9 +8,9 @@
 
 //sends ajax request to server to add a new account, if account already exists
 function createUser() {
-    var user = $('#username').val();
-    var pass = $('#password').val();
-    var em = $('#email').val();
+    var user = $('#userNameInput').val();
+    var pass = $('#passwordInput').val();
+    var em = $('#emailInput').val();
     var b = $('#bio').val();
 
     //create a JSON obj

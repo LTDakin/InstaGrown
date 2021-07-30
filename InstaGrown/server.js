@@ -28,12 +28,13 @@ var Schema = mongoose.Schema;
 //User schema
 var UserSchema = new Schema({
     Username: String,
-    Passowrd: String,
+    Password: String,
     Bio: String,
     Email: String,
     Friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     Posts: [{ type: Schema.Types.ObjectID, ref: 'Post' }]
 });
+var User = mongoose.model('User', UserSchema);
 
 //Post Schema
 var PostSchema = new Schema({
@@ -44,6 +45,7 @@ var PostSchema = new Schema({
     Comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
     Likes: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 });
+var Post = mongoose.model('Post', PostSchema);
 
 //Comment Schema
 var CommentSchema = new Schema({
@@ -51,6 +53,7 @@ var CommentSchema = new Schema({
     Content: String,
     Likes: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 });
+var Comment = mongoose.model('Comment', CommentSchema);
 
 //Message Schema
 var MessageSchema = new Schema({
@@ -59,11 +62,6 @@ var MessageSchema = new Schema({
     Content: String,
     Time: Number
 });
-
-//add schemas to database
-var User = mongoose.model('User', UserSchema);
-var Comment = mongoose.model('Comment', CommentSchema);
-var Post = mongoose.model('Post', PostSchema);
 var Message = mongoose.model('Message', MessageSchema);
 
 /*    REQUESTS   */
@@ -73,8 +71,9 @@ var Message = mongoose.model('Message', MessageSchema);
 //takes a UserObject JSON string from client, parses, uses fields username and passowrd to login
 app.post("/login/user/", (req, res) => {
     var userObj = JSON.parse(req.body.userObjStr);
-    var user = userObj.Username;
-    var pass = userObj.Password;
+    var user = userObj.username;
+    var pass = userObj.password;
+
     //Check if user already exists if not or pass wrong return error
     User.find({ Username: user }).exec(function(error, results) {
         if (results.length == 0) {
@@ -85,7 +84,8 @@ app.post("/login/user/", (req, res) => {
                 res.end(JSON.stringify({ text: 'error' }));
             } else {
                 //add cookie for login 10 min timer
-                res.cookie("login", { Username: user }, { maxAge: 900000 });
+                console.log("adding cookies " + user);
+                res.cookie("login", { username: user }, { maxAge: 900000 });
                 console.log("login successful!")
                 res.end(JSON.stringify({ text: 'ok' }));
             }
@@ -334,7 +334,8 @@ app.get('/get/username/', (req, res) => {
 /*    FUNCTIONS   */
 function authorize(req, res, next) {
     //update to a more secure salting and hashing method with session keys
-    if (req.cookies.login.Username != undefined)
+    console.log(req.cookies);
+    if (req.cookies.login.username != undefined)
         next();
     else
         res.end('unauthorized');
