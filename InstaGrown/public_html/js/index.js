@@ -35,5 +35,5 @@ function login() {
 }
 
 function createAccountPage() {
-    window.location == "/accountCreation.html";
+    window.location = "../accountCreation.html";
 }

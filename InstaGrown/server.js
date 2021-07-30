@@ -73,19 +73,19 @@ var Message = mongoose.model('Message', MessageSchema);
 //takes a UserObject JSON string from client, parses, uses fields username and passowrd to login
 app.post("/login/user/", (req, res) => {
     var userObj = JSON.parse(req.body.userObjStr);
-    var user = userObj.username;
-    var pass = userObj.password;
+    var user = userObj.Username;
+    var pass = userObj.Password;
     //Check if user already exists if not or pass wrong return error
-    User.find({ username: user }).exec(function(error, results) {
+    User.find({ Username: user }).exec(function(error, results) {
         if (results.length == 0) {
             res.end(JSON.stringify({ text: 'error' }));
         } else {
             //check if password matches
-            if (results[0].password != pass) {
+            if (results[0].Password != pass) {
                 res.end(JSON.stringify({ text: 'error' }));
             } else {
                 //add cookie for login 10 min timer
-                res.cookie("login", { username: user }, { maxAge: 900000 });
+                res.cookie("login", { Username: user }, { maxAge: 900000 });
                 console.log("login successful!")
                 res.end(JSON.stringify({ text: 'ok' }));
             }
@@ -105,12 +105,12 @@ app.post("/add/user/", (req, res) => {
     var email = userObj.email;
 
     //Check if user already exists
-    User.find({ username: user }).exec(function(error, results) {
+    User.find({ Username: user }).exec(function(error, results) {
         //create the account
         if (results.length == 0) {
             var newUser = new User({
-                username: user,
-                password: pass,
+                Username: user,
+                Password: pass,
                 Bio: bio,
                 Email: email,
                 Friends: [],
@@ -257,7 +257,7 @@ app.post("/share/post", (req, res) => {
 
 //creates a new post from the user
 app.post("/get/posts", (req, res) => {
-    userN = req.cookies.login.username;
+    userN = req.cookies.login.Username;
     // searches for username
     Users.find({ Username: userN }).exec(function(error, results) {
         if (results.length == 1) {
@@ -271,7 +271,7 @@ app.post("/get/posts", (req, res) => {
 });
 
 app.get("/create/post", (req, res) => {
-    userN = req.cookies.login.username;
+    userN = req.cookies.login.Username;
     Users.find({ Username: userN }).exec(function(error, results) {
         if (results.length == 1) {
             // creates and saves post
@@ -295,7 +295,7 @@ app.get("/create/post", (req, res) => {
 //updates the users bio
 app.post("/update/bio", (req, res) => {
     //get user from cookies
-    var user = req.cookies.login.username;
+    var user = req.cookies.login.Username;
 
     //parse JSON object store data
     var bioObj = JSON.parse(req.body.bioObjStr);
@@ -324,17 +324,17 @@ app.post("/send/user/message", (reg, res) => {
 
 });
 
-//~~~~~~~~~~~~~~~~~~Misc requests 
+//~~~~~~~~~~~~~~~~~~Misc requests
 
 //return the current user based on client's cookie
 app.get('/get/username/', (req, res) => {
-    res.end(JSON.stringify({ text: req.cookies.login.username }));
+    res.end(JSON.stringify({ text: req.cookies.login.Username }));
 });
 
 /*    FUNCTIONS   */
 function authorize(req, res, next) {
     //update to a more secure salting and hashing method with session keys
-    if (req.cookies.login.username != undefined)
+    if (req.cookies.login.Username != undefined)
         next();
     else
         res.end('unauthorized');
@@ -343,7 +343,7 @@ function authorize(req, res, next) {
 /*    RUNTIME    */
 
 //pages to serve depending on path
-app.use('/accountCreation.html', authorize);
+//app.use('/accountCreation.html');
 app.use('/chats.html', authorize);
 app.use('/home.html', authorize);
 app.use('/', express.static("public_html"));
