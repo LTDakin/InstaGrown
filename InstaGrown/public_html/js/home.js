@@ -153,25 +153,26 @@ function populatePosts() {
         method: "GET",
         success: function(result) {
             // updates text with result from request
-            postArea = document.getElementById("posts");
             results = JSON.parse(result);
             let displayedResult = '';
+            console.log(results);
             // iterates through each post and adds it to the result
             for (i in results) {
+
                 displayedResult += '<div class="postDiv"' + i + '>' +
-                    results[i].title + '<br>' +
-                    results[i].Content + '<br>'
+                    results[i].Title + '<br>' +
+                    results[i].Content + '<br>' +
                 '<div id= "actionBar">' +
                 '<span id="like"><input type="button" value="Like"onclick="like();"></span>' +
                 '<span id="comment"><input type="button"' +
-                '<input type = "text" name = comment id = "commentText"/>' +
-                'value="Comment"onclick="comment();">' +
+                '<input type = "text" name = comment id = "commentText"' +
+                'value="Comment"onclick="comment();"/>' +
                 '</span></div>' + results[i].Comments + '</div>';
 
                 //        	<label for="userName">Username: </label>
                 //        	<input type = "text" name = userName id = "userNameInput"/>
             }
-            posts = document.getElementById("posts");
+            posts = document.getElementById("postsContent");
             posts.innerHTML = displayedResult;
         }
     });
@@ -223,4 +224,4 @@ function search() {
 
 // calls timeUpdate(), which updates the posts every 1 second.
 timeUpdate();
-populateFriendsList();
+//populateFriendsList();

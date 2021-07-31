@@ -31,8 +31,10 @@ var UserSchema = new Schema({
     Password: String,
     Bio: String,
     Email: String,
-    Friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    Posts: [{ type: Schema.Types.ObjectID, ref: 'Post' }]
+    //Friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    //Posts: [{ type: Schema.Types.ObjectID, ref: 'Post' }]
+    Friends: [],
+    Posts: []
 });
 var Users = mongoose.model('Users', UserSchema);
 
@@ -42,8 +44,10 @@ var PostSchema = new Schema({
     Title: String,
     Content: String,
     Image: String, //TODO how to implement images
-    Comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
-    Likes: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+    Comments: [],
+    Likes: [],
+    //Comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
+    //Likes: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 });
 var Posts = mongoose.model('Posts', PostSchema);
 
@@ -51,7 +55,8 @@ var Posts = mongoose.model('Posts', PostSchema);
 var CommentSchema = new Schema({
     //Poster: UserSchema,
     Content: String,
-    Likes: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+    Likes: []
+    //Likes: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 });
 var Comment = mongoose.model('Comment', CommentSchema);
 
@@ -176,7 +181,7 @@ app.post("/comment/post/:title", (req, res) => {
     let t = req.params.title;
     userN = req.cookies.login.username;
     let commentString = JSON.parse(req.body.Post);
-    var newComment = new Post(commentString);
+    var newComment = new Posts(commentString);
     Posts.find({ Title: t }).exec(function(error, results) {
         db.collection("posts").update({ Title: t }, { $push: { comments: newComment } });
         res.end("");
@@ -194,7 +199,10 @@ app.get('/get/user/friends', (req, res) => {
     var user = req.cookies.login.username;
 
     //Search for user to get their friends data
-    Users.find({ username: user }).populate("Friends").exec(function(error, results) {
+
+    // the popupulate("Friends") part caused an error
+    //Users.find({ Username: user }).populate("Friends").exec(function(error, results) {
+    Users.find({Username:user}).exec(function(error, results) {
         if (results.length == 0) {
             console.log("username from cookies " + user + " not found in database");
             res.end(JSON.stringify({ text: 'error' }));
@@ -276,11 +284,13 @@ app.get("/get/posts", (req, res) => {
 
 app.post("/create/post", (req, res) => {
     userN = req.cookies.login.Username;
+    console.log("test1");
     Users.find({ Username: userN }).exec(function(error, results) {
         if (results.length == 1) {
+          console.log("test2");
             // creates and saves post
             let postString = JSON.parse(req.body.Post);
-            var newPost = new Post(postString);
+            var newPost = new Posts(postString);
             newPost.save(function(err) { if (err) console.log("ERROR"); });
 
             // updates user's array of posts
@@ -290,6 +300,7 @@ app.post("/create/post", (req, res) => {
             res.end("GOOD");
             // if no username matches, send no such username
         } else {
+            console.log("test3");
             res.end("No such username");
         }
     });
