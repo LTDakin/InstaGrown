@@ -253,8 +253,32 @@ app.get("/add/user/friend", (req, res) => {
 });
 
 //adds a like to a post
-app.post("/like/post", (req, res) => {
+app.get("/like/post/:TITLE/:CONTENT", (req, res) => {
+  let t = req.params.TITLE;
+  let c = req.params.CONTENT;
+  userN = req.cookies.login.username;
 
+  Posts.find({Title:t, Content: c}).exec(function(error, results) {
+    if (results.length == 1) {
+      console.log(results[0]);
+      console.log(userN)
+      if (results[0].Likes.includes(userN)) {
+        console.log("1");
+        res.send("BAD");
+      } else {
+        //adds username to post like array
+        db.collection("posts").update(
+          {Title:t, Content: c},
+          {$push: {Likes: userN }}
+        );
+        console.log("2");
+        res.send("GOOD");
+      }
+    } else {
+      console.log("3");
+      res.send("Doesnt exist");
+    }
+  });
 });
 
 //adds a like to a comment

@@ -157,19 +157,16 @@ function populatePosts() {
             let displayedResult = '';
             // iterates through each post and adds it to the result
             for (i in results) {
-                displayedResult += '<div class="postDiv" id="postDiv"' + i + '><h2>' +
-                    results[i].Title + '</h2>' +
-                    results[i].Content + '<br><br>' +
+                displayedResult += '<div class="postDiv" id="postDiv' + i + '"><h2 id=getTitle>' +
+                    results[i].Title + '</h2><div id="getContent">' +
+                    results[i].Content + '</div><br><br>' +
                 '<div id= "actionBar">' +
                 '<span id="comment">' +
                 '<input type = "text" name = comment id = "commentText"/>' +
                 '<input type="button"value="Comment"onclick="comment(); id = commentButton"/>' +
-                '</span><span id="like"><input type="button" value="Like"onclick="like();"> '
-                + results[i].Likes.length + " Likes" + '<br>'
+                '</span><span id="like"><input type="button" value="Like"onclick="like(this);"> '
+                +  '<br>'
                 +'</span></div>' + results[i].Comments + '</div>';
-
-                //        	<label for="userName">Username: </label>
-                //        	<input type = "text" name = userName id = "userNameInput"/>
             }
             posts = document.getElementById("postsContent");
             posts.innerHTML = displayedResult;
@@ -177,8 +174,35 @@ function populatePosts() {
     });
 }
 
-function like(){
+function like(divName){
+  var parent1 = divName.parentNode; //span
+  var parent2 = parent1.parentNode; //actionBar div
+  var parent = parent2.parentNode; // actual post div
+  //console.log(parent);
+  var divArray = parent.children;
+  //console.log(divArray);
 
+  // gets title
+  ti = divArray[0].id;
+  t = document.getElementById(ti).innerText;
+
+  // gets content
+  co = divArray[1].id;
+  c = document.getElementById(co).innerText;
+
+    console.log(t+",  "+c);
+  $.ajax({
+      //url: "/comment/post/"+t+"/"+d,
+      url: "/like/post/" + t +"/" + c,
+      method: "GET",
+      success: function(result) {
+        if (result != "GOOD") {
+          alert("You cannot like a post more than once!");
+        } else {
+          alert("Post liked!");
+        }
+      }
+  });
 }
 
 //searches for either users or posts and displays
