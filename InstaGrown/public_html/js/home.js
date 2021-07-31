@@ -164,7 +164,8 @@ function populatePosts() {
                 '<span id="comment">' +
                 '<input type = "text" name = comment id = "commentText"/>' +
                 '<input type="button"value="Comment"onclick="comment(); id = commentButton"/>' +
-                '</span><span id="like"><input type="button" value="Like"onclick="like();">'
+                '</span><span id="like"><input type="button" value="Like"onclick="like();"> '
+                + results[i].Likes.length + " Likes" + '<br>'
                 +'</span></div>' + results[i].Comments + '</div>';
 
                 //        	<label for="userName">Username: </label>
@@ -174,6 +175,10 @@ function populatePosts() {
             posts.innerHTML = displayedResult;
         }
     });
+}
+
+function like(){
+
 }
 
 //searches for either users or posts and displays
