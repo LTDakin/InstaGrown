@@ -2,7 +2,7 @@ body {
 	background-color: rgb(199, 213, 206);
 	padding: 0px;
 	margin: 0px;
-	
+
 }
 
 #siteHeader{
@@ -27,6 +27,7 @@ body {
 
 #headerTitle{
 	font-size: 50px;
+	margin-bottom: 0px;
 }
 
 h1 {
@@ -84,5 +85,7 @@ h1 {
 	font-size: 30px;
 }
 
-
-
+#postButton {
+	position: fixed;
+	right: 10px;
+}

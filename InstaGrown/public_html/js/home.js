@@ -1,3 +1,7 @@
+function postPage() {
+    window.location = "../createPost.html";
+}
+
 //Generates the html for a friend for friends list
 function createFriend(friendData) {
     var str = '';
@@ -44,7 +48,7 @@ function addFriend() {
     var name = 'Joe'; //TODO pick name off button
 
     //create a JSON obj
-    var friendObj = { friendName = name };
+    var friendObj = { friendName: name };
     var friendObj_str = JSON.stringify(friendObj);
 
     $.ajax({
@@ -69,7 +73,7 @@ function updateBio() {
     var b = $('#newBio').val().toString();
 
     //create a JSON obj
-    var bioObj = { bio = b };
+    var bioObj = { bio: b };
     var bioObj_str = JSON.stringify(bioObj);
 
     $.ajax({
@@ -184,7 +188,7 @@ function search() {
 
     if (option == "users") {
         //create a JSON obj
-        var searchObj = { username = key };
+        var searchObj = { username: key };
         var searchObj_str = JSON.stringify(searchObj);
 
         $.ajax({
@@ -199,7 +203,7 @@ function search() {
         });
     } else if (option == "posts") {
         //create a JSON obj
-        var searchObj = { keyword = key };
+        var searchObj = { keyword: key };
         var searchObj_str = JSON.stringify(searchObj);
 
         $.ajax({

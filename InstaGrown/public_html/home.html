@@ -12,19 +12,25 @@
     <meta charset="utf-8">
     <title>InstaGrow</title>
     <link rel="stylesheet" type="text/css" href="./css/home.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/js/home.js"></script>
 </head>
 
 <body>
     <div id="siteHeader">
         <h1 id="headerTitle">InstaGrow</h1>
-        <div>
+        <span>
             <select name="searchOption" id="searchOption">
                 <option value="users">users</option>
                 <option value="posts">posts</option>
             </select>
             <input id="searchKey" type="text" value=""></input>
-            <button onclick="search()">Search</button>
-        </div>
+            <button id="searchButton"onclick="search();">Search</button>
+
+        </span>
+        <span id="postSpan">
+          <button id="postButton"onclick="postPage();">Create Post</button>
+        </span>
     </div>
 
     <div id="siteContent">
@@ -41,8 +47,6 @@
             <div id="statusContent"></div>
         </div>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="js/home.js"></script>
 </body>
 
 </html>

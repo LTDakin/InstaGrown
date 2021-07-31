@@ -34,7 +34,7 @@ var UserSchema = new Schema({
     Friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     Posts: [{ type: Schema.Types.ObjectID, ref: 'Post' }]
 });
-var User = mongoose.model('User', UserSchema);
+var Users = mongoose.model('Users', UserSchema);
 
 //Post Schema
 var PostSchema = new Schema({
@@ -45,7 +45,7 @@ var PostSchema = new Schema({
     Comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
     Likes: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 });
-var Post = mongoose.model('Post', PostSchema);
+var Posts = mongoose.model('Posts', PostSchema);
 
 //Comment Schema
 var CommentSchema = new Schema({
@@ -75,7 +75,7 @@ app.post("/login/user/", (req, res) => {
     var pass = userObj.password;
 
     //Check if user already exists if not or pass wrong return error
-    User.find({ Username: user }).exec(function(error, results) {
+    Users.find({ Username: user }).exec(function(error, results) {
         if (results.length == 0) {
             res.end(JSON.stringify({ text: 'error' }));
         } else {
@@ -105,7 +105,7 @@ app.post("/add/user/", (req, res) => {
     var email = userObj.email;
 
     //Check if user already exists
-    User.find({ Username: user }).exec(function(error, results) {
+    Users.find({ Username: user }).exec(function(error, results) {
         //create the account
         if (results.length == 0) {
             var newUser = new User({
@@ -140,7 +140,7 @@ app.get("/search/user/", (req, res) => {
     console.log("searching user with key " + user);
 
     //search database and return list of users
-    User.find({ username: new RegExp(user, "i") }).exec(function(error, results) {
+    Users.find({ username: new RegExp(user, "i") }).exec(function(error, results) {
         var result = [];
         for (var i = 0; i < results.length; i++) {
             //add user to list of found users
@@ -160,7 +160,7 @@ app.get("/search/posts/", (req, res) => {
     console.log("searching post with key " + key);
 
     //search database and return list of posts whose content contains key
-    Post.find({ Content: new RegExp(key, "i") }).exec(function(error, results) {
+    Posts.find({ Content: new RegExp(key, "i") }).exec(function(error, results) {
         var result = [];
         for (var i = 0; i < results.length; i++) {
             //add post to list of found posts
@@ -177,7 +177,7 @@ app.post("/comment/post/:title", (req, res) => {
     userN = req.cookies.login.username;
     let commentString = JSON.parse(req.body.Post);
     var newComment = new Post(commentString);
-    Post.find({ Title: t }).exec(function(error, results) {
+    Posts.find({ Title: t }).exec(function(error, results) {
         db.collection("posts").update({ Title: t }, { $push: { comments: newComment } });
         res.end("");
     });
@@ -194,7 +194,7 @@ app.get('/get/user/friends', (req, res) => {
     var user = req.cookies.login.username;
 
     //Search for user to get their friends data
-    User.find({ username: user }).populate("Friends").exec(function(error, results) {
+    Users.find({ username: user }).populate("Friends").exec(function(error, results) {
         if (results.length == 0) {
             console.log("username from cookies " + user + " not found in database");
             res.end(JSON.stringify({ text: 'error' }));
@@ -220,7 +220,7 @@ app.get("/add/user/friend", (req, res) => {
     var user = req.cookies.login.username;
 
     //Search for user to get their data
-    User.find({ username: user }).exec(function(error, results) {
+    Users.find({ username: user }).exec(function(error, results) {
         if (results.length == 0) {
             console.log("username from cookies " + user + " not found in database");
             res.end(JSON.stringify({ text: 'error' }));
@@ -228,7 +228,7 @@ app.get("/add/user/friend", (req, res) => {
             userData = results[0];
 
             //Search for the friend user is trying to add
-            User.find({ username: name }).exec(function(error, results) {
+            Users.find({ username: name }).exec(function(error, results) {
                 if (results.length == 0) {
                     console.log("friend name " + name + " not found");
                     res.end(JSON.stringify({ text: 'error' }));
@@ -260,7 +260,7 @@ app.post("/share/post", (req, res) => {
 });
 
 //creates a new post from the user
-app.post("/get/posts", (req, res) => {
+app.get("/get/posts", (req, res) => {
     userN = req.cookies.login.Username;
     // searches for username
     Users.find({ Username: userN }).exec(function(error, results) {
@@ -274,7 +274,7 @@ app.post("/get/posts", (req, res) => {
     });
 });
 
-app.get("/create/post", (req, res) => {
+app.post("/create/post", (req, res) => {
     userN = req.cookies.login.Username;
     Users.find({ Username: userN }).exec(function(error, results) {
         if (results.length == 1) {
@@ -306,7 +306,7 @@ app.post("/update/bio", (req, res) => {
     var bio = bioObj.bio;
 
     //Search for user to update their bio
-    User.find({ username: user }).exec(function(error, results) {
+    Users.find({ username: user }).exec(function(error, results) {
         if (results.length == 0) {
             console.log("username from cookies " + user + " not found in database");
             res.end(JSON.stringify({ text: 'error' }));
