@@ -113,7 +113,7 @@ app.post("/add/user/", (req, res) => {
     Users.find({ Username: user }).exec(function(error, results) {
         //create the account
         if (results.length == 0) {
-            var newUser = new User({
+            var newUser = new Users({
                 Username: user,
                 Password: pass,
                 Bio: bio,
