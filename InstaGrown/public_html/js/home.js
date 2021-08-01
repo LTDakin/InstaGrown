@@ -1,3 +1,5 @@
+window.onLoad =populatePosts();
+
 function postPage() {
     window.location = "../createPost.html";
 }
@@ -121,30 +123,7 @@ function searchPosts() {
 }
 
 function timeUpdate() {
-    setInterval(populatePosts, 1000);
     setInterval(populateFriendsList, 1000);
-}
-
-function comment() {
-    var parent = divName.parentNode;
-    var divArray = parent.children;
-
-    ti = divArray[0].id;
-    //de = divArray[3].id;
-    t = document.getElementById(ti).innerText;
-
-    commentText = document.getElementById("commentText").innerText;
-
-    post = { Content: commetText, Likes: [] };
-    post_str = JSON.stringify(post);
-    params = "Post=" + post_str;
-    $.ajax({
-        //url: "/comment/post/"+t+"/"+d,
-        url: "/comment/post/" + t,
-        method: "POST",
-        data: params,
-        success: function(result) {}
-    });
 }
 
 function populatePosts() {
@@ -162,8 +141,8 @@ function populatePosts() {
                     results[i].Content + '</div><br><br>' +
                 '<div id= "actionBar">' +
                 '<span id="comment">' +
-                '<input type = "text" name = comment id = "commentText"/>' +
-                '<input type="button"value="Comment"onclick="comment(); id = commentButton"/>' +
+                '<input type = "text" name = comment id = "getCommentText"/>' +
+                '<input type="button"value="Comment"onclick="comment(this);" id = "commentButton">' +
                 '</span><span id="like"><input type="button" value="Like"onclick="like(this);"> '
                 +  '<br>'
                 +'</span></div>' + results[i].Comments + '</div>';
@@ -190,9 +169,7 @@ function like(divName){
   co = divArray[1].id;
   c = document.getElementById(co).innerText;
 
-    console.log(t+",  "+c);
   $.ajax({
-      //url: "/comment/post/"+t+"/"+d,
       url: "/like/post/" + t +"/" + c,
       method: "GET",
       success: function(result) {
@@ -200,8 +177,37 @@ function like(divName){
           alert("You cannot like a post more than once!");
         } else {
           alert("Post liked!");
+          populatePosts();
         }
       }
+  });
+}
+
+function comment(divName) {
+  var parent1 = divName.parentNode; //span
+  var parent2 = parent1.parentNode; //actionBar div
+  var parent = parent2.parentNode; // actual post div
+  var divArray = parent.children;
+  ti = divArray[0].id;
+  t = document.getElementById(ti).innerText;
+
+  co = divArray[1].id;
+  c = document.getElementById(co).innerText;
+
+  var commentArray = parent1.children;
+  ct = commentArray[0].id;
+  newCommentText = document.getElementById(ct).value;
+  $.ajax({
+    url: "/comment/post/" + t + "/" + c + "/" + newCommentText,
+    method: "GET",
+    success: function(result) {
+      if (result != "GOOD") {
+        alert("ERROR!");
+      } else {
+        alert("Comment posted!");
+        populatePosts();
+      }
+    }
   });
 }
 

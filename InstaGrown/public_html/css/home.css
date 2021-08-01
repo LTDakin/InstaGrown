@@ -58,6 +58,7 @@ h1 {
 	width: 50%;
 	height: 80%;
 	background-color: rgb(110, 163, 130);
+	overflow-y: scroll;
 }
 
 #postsTitle{
