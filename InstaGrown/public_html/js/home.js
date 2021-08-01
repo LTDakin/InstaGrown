@@ -136,18 +136,17 @@ function populatePosts() {
             let displayedResult = '';
             // iterates through each post and adds it to the result
             for (i in results) {
-                displayedResult += '<div class="postDiv" id="postDiv' + i + '"><h2 id=getTitle>' +
-                    results[i].Title + '</h2><div id="getContent">' +
+                displayedResult += '<div class="postDiv" id="postDiv' + i + '"><h2 id="getTitle' + i + '">' +
+                    results[i].Title + '</h2><div id="getContent' + i + '">' +
                     results[i].Content + '</div><br><br>' +
-                '<div id= "actionBar">' +
-                '<span id="comment">' +
-                '<input type = "text" name = comment id = "getCommentText"/>' +
-                '<input type="button"value="Comment"onclick="comment(this);" id = "commentButton">' +
-                '</span><span id="like"><input type="button" value="Like"onclick="like(this);"> '
+                '<div id= "actionBar' + i + '">' +
+                '<span id="comment' + i + '">' +
+                '<input type = "text" name = comment id = "getCommentText' + i + '"/>' +
+                '<input type="button"value="Comment"onclick="comment(this);" id = "commentButton' + i + '">' +
+                '</span><span id="like' + i + '"><input type="button" value="Like"onclick="like(this);"> '
                 +  '<br>'
                 +'</span></div>' + results[i].Comments + '</div>';
             }
-            posts = document.getElementById("postsContent");
             posts.innerHTML = displayedResult;
         }
     });
@@ -159,7 +158,7 @@ function like(divName){
   var parent = parent2.parentNode; // actual post div
   //console.log(parent);
   var divArray = parent.children;
-  //console.log(divArray);
+  console.log(divArray);
 
   // gets title
   ti = divArray[0].id;
@@ -174,7 +173,8 @@ function like(divName){
       method: "GET",
       success: function(result) {
         if (result != "GOOD") {
-          alert("You cannot like a post more than once!");
+          //alert("You cannot like a post more than once!");
+          alert(result);
         } else {
           alert("Post liked!");
           populatePosts();

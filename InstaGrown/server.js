@@ -175,6 +175,14 @@ app.get("/search/posts/", (req, res) => {
     });
 });
 
+
+// for testing
+app.get("/home.html/get/posts", (req, res) => {
+    Posts.find({}).exec(function(error, results) {
+        res.end(JSON.stringify(results, null, 4));
+    });
+});
+
 //adds a comment to a post
 app.get("/comment/post/:TITLE/:CONTENT/:COMMENT", (req, res) => {
   console.log("test2");
@@ -272,6 +280,7 @@ app.get("/like/post/:TITLE/:CONTENT", (req, res) => {
   Posts.find({Title:t, Content: c}).exec(function(error, results) {
     if (results.length != 0) {
       if (results[0].Likes.includes(userN)) {
+        console.log(results[0]);
         res.send("BAD");
       } else {
         //adds username to post like array
