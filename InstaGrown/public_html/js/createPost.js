@@ -8,7 +8,6 @@ function createPost() {
   post = {Title : postTitle , Content: postText, Image: "", Comments: [], Likes: []};
   post_str = JSON.stringify(post);
   params = "Post="+post_str;
-  console.log("????");
   $.ajax({
     // designates url, type of request, and data
     url: "/create/post",

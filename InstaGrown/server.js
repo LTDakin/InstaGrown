@@ -307,7 +307,7 @@ app.post("/share/post", (req, res) => {
 
 //creates a new post from the user
 app.get("/get/posts", (req, res) => {
-    userN = req.cookies.login.Username;
+    userN = req.cookies.login.username;
     // searches for username
     Users.find({ Username: userN }).exec(function(error, results) {
         if (results.length == 1) {
@@ -321,7 +321,7 @@ app.get("/get/posts", (req, res) => {
 });
 
 app.post("/create/post", (req, res) => {
-    userN = req.cookies.login.Username;
+    userN = req.cookies.login.username;
     console.log("test1");
     Users.find({ Username: userN }).exec(function(error, results) {
         if (results.length == 1) {
@@ -348,7 +348,7 @@ app.post("/create/post", (req, res) => {
 //updates the users bio
 app.post("/update/bio", (req, res) => {
     //get user from cookies
-    var user = req.cookies.login.Username;
+    var user = req.cookies.login.username;
 
     //parse JSON object store data
     var bioObj = JSON.parse(req.body.bioObjStr);
@@ -381,7 +381,7 @@ app.post("/send/user/message", (reg, res) => {
 
 //return the current user based on client's cookie
 app.get('/get/username/', (req, res) => {
-    res.end(JSON.stringify({ text: req.cookies.login.Username }));
+    res.end(JSON.stringify({ text: req.cookies.login.username }));
 });
 
 /*    FUNCTIONS   */
