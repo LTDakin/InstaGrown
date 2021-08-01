@@ -185,18 +185,17 @@ app.get("/home.html/get/posts", (req, res) => {
 
 //adds a comment to a post
 app.get("/comment/post/:TITLE/:CONTENT/:COMMENT", (req, res) => {
-  console.log("test2");
   let t = req.params.TITLE;
   let c = req.params.CONTENT;
   let commentParam = req.params.COMMENT;
   userN = req.cookies.login.username;
   //var newComment = new Comment(commentParam, []);
   var newComment = new Comment({Content: commentParam, Likes:[]});
-  console.log("test3");
+
   // save
   Posts.find({Title:t, Content: c}).exec(function(error, results) {
-    console.log(results[0]);
-    console.log("test4");
+    var newComment = new Comment({Content: commentParam, Likes:[]});
+    newComment.save(function (err) { if (err) console.log("ERROR");});
     if (results.length != 0) {
       db.collection("posts").update(
         { Title:t, Content: c },
@@ -281,7 +280,7 @@ app.get("/like/post/:TITLE/:CONTENT", (req, res) => {
     if (results.length != 0) {
       if (results[0].Likes.includes(userN)) {
         console.log(results[0]);
-        res.send("BAD");
+        res.send("You Cannot Like a Post More than Once!");
       } else {
         //adds username to post like array
         db.collection("posts").update(

@@ -136,6 +136,7 @@ function populatePosts() {
             let displayedResult = '';
             // iterates through each post and adds it to the result
             for (i in results) {
+              console.log(results[i].Comments);
                 displayedResult += '<div class="postDiv" id="postDiv' + i + '"><h2 id="getTitle' + i + '">' +
                     results[i].Title + '</h2><div id="getContent' + i + '">' +
                     results[i].Content + '</div><br><br>' +
@@ -147,7 +148,7 @@ function populatePosts() {
                 +  '<br>'
                 +'</span></div>' + results[i].Comments + '</div>';
             }
-            posts.innerHTML = displayedResult;
+            postsContent.innerHTML = displayedResult;
         }
     });
 }
