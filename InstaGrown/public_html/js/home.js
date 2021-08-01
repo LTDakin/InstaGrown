@@ -145,7 +145,7 @@ function populatePosts() {
                 '<input type = "text" name = comment id = "getCommentText' + i + '"/>' +
                 '<input type="button"value="Comment"onclick="comment(this);" id = "commentButton' + i + '">' +
                 '</span><span id="like' + i + '"><input type="button" value="Like"onclick="like(this);"> '
-                +  '<br>'
+                +  results[i].Likes.length + ' Likes<br>'
                 +'</span></div>' + results[i].Comments + '</div>';
             }
             postsContent.innerHTML = displayedResult;

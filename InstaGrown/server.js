@@ -292,6 +292,7 @@ app.get("/like/post/:TITLE/:CONTENT", (req, res) => {
           {Title:t, Content: c},
           {$push: {Likes: userN }}
         );
+        updatePosts(t, c, userN);
         res.send("GOOD");
       }
     } else {
@@ -299,6 +300,30 @@ app.get("/like/post/:TITLE/:CONTENT", (req, res) => {
     }
   });
 });
+
+// used to update the array of posts in user when a post is liked
+function updatePosts(t, c, u){
+  userN = u;
+  updated = [];
+  Users.find({Username:userN}).exec(function(error, results) {
+    var user = results[0];
+    Posts.find({Title:t, Content: c}).exec(function(error, results) {
+      newPost = results[0];
+      for (i in user.Posts) {
+        if (user.Posts[i].Title == t && user.Posts[i].Content == c) {
+          updated.push(newPost);
+        } else {
+          updated.push(user.Posts[i]);
+        }
+      }
+      db.collection("users").update(
+        {Username: userN},
+        {$set: {Posts: updated }}
+      );
+    });
+  });
+}
+
 
 //adds a like to a comment
 app.post("/like/comment", (req, res) => {
