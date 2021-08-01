@@ -182,6 +182,11 @@ app.get("/home.html/get/posts", (req, res) => {
         res.end(JSON.stringify(results, null, 4));
     });
 });
+app.get("/home.html/get/users", (req, res) => {
+    Users.find({}).exec(function(error, results) {
+        res.end(JSON.stringify(results, null, 4));
+    });
+});
 
 //adds a comment to a post
 app.get("/comment/post/:TITLE/:CONTENT/:COMMENT", (req, res) => {
