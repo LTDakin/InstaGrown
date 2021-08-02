@@ -136,6 +136,7 @@ function populatePosts() {
             let displayedResult = '';
             // iterates through each post and adds it to the result
             for (i in results) {
+              console.log(results[i]);
               console.log(results[i].Comments);
                 displayedResult += '<div class="postDiv" id="postDiv' + i + '"><h2 id="getTitle' + i + '">' +
                     results[i].Title + '</h2><div id="getContent' + i + '">' +
@@ -146,7 +147,12 @@ function populatePosts() {
                 '<input type="button"value="Comment"onclick="comment(this);" id = "commentButton' + i + '">' +
                 '</span><span id="like' + i + '"><input type="button" value="Like"onclick="like(this);"> '
                 +  results[i].Likes.length + ' Likes<br>'
-                +'</span></div>' + results[i].Comments + '</div>';
+                +'</span></div><br><div>Comments:</div>';
+
+                for (j in results[i].Comments) {
+                  displayedResult += '<div id=commentDiv>' + results[i].Comments[j].Content+ '</div>';
+                }
+                displayedResult += '</div>';
             }
             postsContent.innerHTML = displayedResult;
         }
