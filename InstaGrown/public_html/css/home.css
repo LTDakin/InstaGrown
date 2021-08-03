@@ -92,9 +92,12 @@ h1 {
 }
 
 .postDiv{
+	padding-top: 10px;
+	padding-bottom: 10px;
+	border-radius: 12px;
+	background-color: white;
 	width: 75%;
 	text-align: center;
-	border: solid black 2px;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 10px;

@@ -191,12 +191,13 @@ app.get("/search/posts/:KEY", (req, res) => {
 });
 
 
-// for testing
+// for testing, not called in functions
 app.get("/home.html/get/posts", (req, res) => {
     Posts.find({}).exec(function(error, results) {
         res.end(JSON.stringify(results, null, 4));
     });
 });
+// for testing, not called in functions
 app.get("/home.html/get/users", (req, res) => {
     Users.find({}).exec(function(error, results) {
         res.end(JSON.stringify(results, null, 4));
@@ -369,12 +370,39 @@ app.post("/like/comment", (req, res) => {
 });
 
 //shares another user's post as a new post from the current user
-app.post("/share/post", (req, res) => {
+app.get("/share/post/:T/:C", (req, res) => {
+  userN = req.cookies.login.username;
+  title =req.params.T;
+  content = req.params.C;
+  Users.find({ Username: userN }).exec(function(error, results) {
+      if (results.length == 1) {
+          // creates and saves post
+          var newPost = new Posts({
+            Title: title,
+            Content: content,
+            Comments: [],
+            Likes: [],
+          });
+          newPost.save(function (err) { if (err) console.log("ERROR");});
 
+          // updates user's array of posts
+          db.collection("users").update( //collection name?
+              { Username: userN }, { $push: { Posts: newPost } }
+          );
+          res.end("GOOD");
+          // if no username matches, send no such username
+      } else {
+          res.end("No such username");
+      }
+  });
 });
 
 //gets the posts from the server
 app.get("/get/posts", (req, res) => {
+  Posts.find({}).exec(function(error, results) {
+      res.end(JSON.stringify(results, null, 4));
+  });
+  /*
     userN = req.cookies.login.username;
     // searches for username
     Users.find({ Username: userN }).exec(function(error, results) {
@@ -385,7 +413,7 @@ app.get("/get/posts", (req, res) => {
         } else {
             res.end("BAD");
         }
-    });
+    });*/
 });
 
 app.post("/create/post", (req, res) => {
@@ -463,7 +491,7 @@ function authorize(req, res, next) {
 
 //function for hashing the password when creating user
 function hashPass(password){
-  
+
 }
 
 /*    RUNTIME    */

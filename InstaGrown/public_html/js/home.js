@@ -44,7 +44,7 @@ function populatePosts() {
             for (i in results) {
               console.log(results[i]);
               console.log(results[i].Comments);
-                displayedResult += generatePosts(results[i]);
+              displayedResult += generatePosts(results[i], i);
             }
             postsContent.innerHTML = displayedResult;
         }
@@ -119,15 +119,15 @@ function like(divName){
     //console.log(parent);
     var divArray = parent.children;
     console.log(divArray);
-  
+
     // gets title
     ti = divArray[0].id;
     t = document.getElementById(ti).innerText;
-  
+
     // gets content
     co = divArray[1].id;
     c = document.getElementById(co).innerText;
-  
+
     $.ajax({
         url: "/like/post/" + t +"/" + c,
         method: "GET",
@@ -143,6 +143,31 @@ function like(divName){
     });
   }
 
+// shares a post (reposts it)
+function share(divName) {
+  var parent1 = divName.parentNode; //span
+  var parent2 = parent1.parentNode; //actionBar div
+  var parent = parent2.parentNode; // actual post div
+  var divArray = parent.children;
+  ti = divArray[0].id;
+  t = document.getElementById(ti).innerText;
+
+  co = divArray[1].id;
+  c = document.getElementById(co).innerText;
+  $.ajax({
+    url: "/share/post/" + t + "/" + c,
+    method: "GET",
+    success: function(result) {
+      if (result != "GOOD") {
+        alert("ERROR!");
+      } else {
+        alert("Post Shared!");
+        populatePosts();
+      }
+    }
+  });
+}
+
 //adds a comment to a post
 function comment(divName) {
     var parent1 = divName.parentNode; //span
@@ -151,13 +176,14 @@ function comment(divName) {
     var divArray = parent.children;
     ti = divArray[0].id;
     t = document.getElementById(ti).innerText;
-  
+
     co = divArray[1].id;
     c = document.getElementById(co).innerText;
-  
+
     var commentArray = parent1.children;
     ct = commentArray[0].id;
     newCommentText = document.getElementById(ct).value;
+    console.log(t+", "+c+", "+newCommentText);
     $.ajax({
       url: "/comment/post/" + t + "/" + c + "/" + newCommentText,
       method: "GET",
@@ -203,7 +229,7 @@ function search() {
                         var displayedResult = '';
                         for(i in resultUsers){
                             //default to false
-                            var friendBool = false; 
+                            var friendBool = false;
                             //if user is a friend let generate method know to not add a addFriend() button
                             console.log("checking if user " + resultUsers[i].Username + " is already a friend");
                             if(friends.includes(resultUsers[i].Username)){
@@ -274,13 +300,16 @@ function generatePosts(postObj, i){
         str += '<div id="getContent' + i + '">' + postObj.Content + '</div>';
             str += '<br><br>';
             str += '<div id= "actionBar' + i + '">';
-            str += '<span id="comment' + i + '">';
+            str += '<span id="Comment' + i + '">';
                 str += '<input type = "text" name = comment id = "getCommentText' + i + '"/>';
                 str += '<input type="button"value="Comment"onclick="comment(this);" id = "commentButton' + i + '">';
             str += '</span>';
-            str += '<span id="like' + i + '">';
+            str += '<br><span id="Like' + i + '">';
                 str += '<input type="button" value="Like" onclick="like(this);">';
                 str += ' ' +  postObj.Likes.length + ' Likes';
+            str += '</span>';
+            str += '<br><span id="Share' + i + '">';
+                str += '<input type="button" value="Share" onclick="share(this);">';
             str += '</span>';
         str += '</div>';
         str += '<br>';
@@ -293,5 +322,3 @@ function generatePosts(postObj, i){
     str += '</div>';
     return str;
 }
-
-
