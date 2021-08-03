@@ -31,7 +31,7 @@ var UserSchema = new Schema({
     Password: String,
     Bio: String,
     Email: String,
-    //Friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    Friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     //Posts: [{ type: Schema.Types.ObjectID, ref: 'Post' }]
     Friends: [],
     Posts: []
@@ -237,18 +237,17 @@ app.get('/get/user/friends', (req, res) => {
     var user = req.cookies.login.username;
 
     //Search for user to get their friends data
-
-    // the popupulate("Friends") part caused an error
-    //Users.find({ Username: user }).populate("Friends").exec(function(error, results) {
-    Users.find({Username:user}).exec(function(error, results) {
+    Users.find({ Username: user }).populate("Friends").exec(function(error, results) {
+    //Users.find({Username:user}).exec(function(error, results) {
         if (results.length == 0) {
             console.log("username from cookies " + user + " not found in database");
             res.end(JSON.stringify({ text: 'error' }));
         } else {
             userData = results[0];
-            var result = '';
-            for (var i = 0; userData.Friends.length; i++) {
-                result += userData.Friends[i];
+            var result = [];
+            //save friend data to a list
+            for(var i = 0; i < userData.Friends.length; i++) {
+                result.push(userData.Friends[i]);
             }
             //return the list of friends
             res.end(JSON.stringify(result, null, 2));
@@ -257,33 +256,35 @@ app.get('/get/user/friends', (req, res) => {
 });
 
 //adds a user as a friend
-app.get("/add/user/friend", (req, res) => {
+app.post("/add/user/friend", (req, res) => {
     //parse JSON object store data
     var friendObj = JSON.parse(req.body.friendObjStr);
-    var name = friendObj.friendName;
+    var id = friendObj.friendName;
+    console.log("id of user trying to add " + id);
 
     //get user from cookies
     var user = req.cookies.login.username;
 
     //Search for user to get their data
-    Users.find({ username: user }).exec(function(error, results) {
+    Users.find({ Username: user }).exec(function(error, results) {
         if (results.length == 0) {
             console.log("username from cookies " + user + " not found in database");
             res.end(JSON.stringify({ text: 'error' }));
         } else {
             userData = results[0];
 
-            //Search for the friend user is trying to add
-            Users.find({ username: name }).exec(function(error, results) {
+            //Search for the friend, user is trying to add
+            Users.find({ _id: id }).exec(function(error, results) {
                 if (results.length == 0) {
-                    console.log("friend name " + name + " not found");
+                    console.log("friend id " + id + " not found");
                     res.end(JSON.stringify({ text: 'error' }));
                 } else {
-                    //add to friends list and re-save into database
+                    //add id to friends list and re-save into database
                     userData.Friends.push(results[0]._id);
                     userData.save(function(err) {
                         if (err) console.log("error occured saving to db");
                     });
+                    res.end(JSON.stringify({ text: 'success' }));
                 }
             });
         }

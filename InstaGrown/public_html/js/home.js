@@ -6,8 +6,6 @@ window.onLoad = populateFriendsList();
 
 //Gets list of user's friends from db and displays in the FriendsContent
 function populateFriendsList() {
-    //generate friends list and insert into friendsContent
-    var friendListArea = $('#friendsContent');
     //get username and then get user's friend list
     $.ajax({
         url: '/get/username/',
@@ -26,7 +24,7 @@ function populateFriendsList() {
                         friendsHtml += generateFriend(result[i]);
                     }
                     //add friendsHtml to section
-                    friendListArea.html(friendsHtml);
+                    $('#friendsContent').html(friendsHtml);
                 }
             });
         }
@@ -53,42 +51,6 @@ function populatePosts() {
     });
 }
 
-/* saving in case, delete if still works
-//loads the posts into the post section div
-function populatePosts() {
-    $.ajax({
-        url: "/get/posts",
-        method: "GET",
-        success: function(result) {
-            // updates text with result from request
-            results = JSON.parse(result);
-            let displayedResult = '';
-            // iterates through each post and adds it to the result
-            for (i in results) {
-              console.log(results[i]);
-              console.log(results[i].Comments);
-                displayedResult += '<div class="postDiv" id="postDiv' + i + '"><h2 id="getTitle' + i + '">' +
-                    results[i].Title + '</h2><div id="getContent' + i + '">' +
-                    results[i].Content + '</div><br><br>' +
-                '<div id= "actionBar' + i + '">' +
-                '<span id="comment' + i + '">' +
-                '<input type = "text" name = comment id = "getCommentText' + i + '"/>' +
-                '<input type="button"value="Comment"onclick="comment(this);" id = "commentButton' + i + '">' +
-                '</span><span id="like' + i + '"><input type="button" value="Like"onclick="like(this);"> '
-                +  results[i].Likes.length + ' Likes<br>'
-                +'</span></div><br><div>Comments:</div>';
-
-                for (j in results[i].Comments) {
-                  displayedResult += '<div id=commentDiv>' + results[i].Comments[j].Content+ '</div>';
-                }
-                displayedResult += '</div>';
-            }
-            postsContent.innerHTML = displayedResult;
-        }
-    });
-}
-*/
-
 //-------------------------------------------------------------------------------Button Functions
 
 //navigates page to the create a post page
@@ -97,13 +59,12 @@ function postPage() {
 }
 
 //adds a friend to user's friends TODO  no button exists yet
-function addFriend() {
-    //button's id is the friend to be added
-    //TODO not sure where this button is made yet
-    var name = 'Joe'; //TODO pick name off button
+function addFriend(id) {
+    //get button's id, id is the friend to be added
+    var userId = id;
 
     //create a JSON obj
-    var friendObj = { friendName: name };
+    var friendObj = { friendName: userId };
     var friendObj_str = JSON.stringify(friendObj);
 
     $.ajax({
@@ -118,6 +79,7 @@ function addFriend() {
                 alert('error');
             } else {
                 alert('friend added!');
+                populateFriendsList();
             }
         }
     });
@@ -218,26 +180,48 @@ function search() {
     console.log("Searching with option " + option + " and key " + key)
     //handle depending on the search option
     if (option == "users") {
+        //search users with keyword
         $.ajax({
             url: '/search/user/'+key,
             method: 'GET',
             success: function(res) {
-                var result = JSON.parse(res);
+                var resultUsers = JSON.parse(res);
+                var friends = [];
 
-                //display the users returned in middle section
-                var displayedResult = '';
-                for(i in result){
-                    displayedResult += generateUsers(result[i]);
-                }
-                //add the html to middle of page
-                $('#postsContent').html(displayedResult);
+                //get list of user's friends
+                //TODO bug something is causing this success function to not run
+                $.ajax({
+                    url: '/get/user/friends',
+                    method: 'GET',
+                    success: function(res) {
+                        //array of the user's friends
+                        var result = JSON.parse(res);
+                        for(i in result){
+                            friends.push(result[i].Username);
+                        }
+                        //display the users returned in middle section
+                        var displayedResult = '';
+                        for(i in resultUsers){
+                            //default to false
+                            var friendBool = false; 
+                            //if user is a friend let generate method know to not add a addFriend() button
+                            console.log("checking if user " + resultUsers[i].Username + " is already a friend");
+                            if(friends.includes(resultUsers[i].Username)){
+                                console.log("hey " + resultUsers[i].Username + " is already a friend, setting friendbool to true");
+                                var friendBool = true;
+                            }
+                            displayedResult += generateUsers(resultUsers[i], friendBool);
+                        }
+                        //add the html to middle of page
+                        $('#postsContent').html(displayedResult);
+                    }
+                });
             }
         });
     } else if (option == "posts") {
         $.ajax({
             url: '/search/posts/'+key,
             method: 'GET',
-            data: { searchObjStr: searchObj_str },
             success: function(res) {
                 var result = JSON.parse(res);
                 //display the posts returned in middle section
@@ -259,18 +243,23 @@ function search() {
 //Generates the html for a friend for friends list
 function generateFriend(friendData) {
     var str = '';
-    str += '<div class="friendItem">';
-    str += '<h3>' + friendData.Username + '</h3>';
-    str += '<p class="friendBio">' + friendData.Bio + '</p>';
+    str += '<div class="friendTile">';
+    str += '<h3 class="friendTileName">' + friendData.Username + '</h3>';
+    str += '<p class="friendTileBio">' + friendData.Bio + '</p>';
+    str += '<button class="msgFriendButton" id="'+friendData._id+'" onclick="msgFriend(this.id)">Message</button>';
     str += '</div>';
     return str;
 }
 
 //generates html code to display users
-function generateUsers(userObj){
+function generateUsers(userObj, friendBool){
     var str = '';
     str += '<div class="userTile" id='+ userObj._id +'>';
     str += '<h3 class="userTileName">'+ userObj.Username +'</h3>';
+    //if they are not friends add a button to addFriend()
+    if(friendBool != true){
+        str += '<button class="addFriendButton" id="'+userObj._id+'" onclick="addFriend(this.id)">Add Friend</button>'
+    }
     str += '<p class="userTileEmail"> Contact: '+ userObj.Email +'</p>';
     str += '<p class="userTileBio">'+ userObj.Bio +'</p>';
     str += '</div>'
