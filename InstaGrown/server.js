@@ -136,16 +136,14 @@ app.post("/add/user/", (req, res) => {
 //home.html requests----------------------------------------------------------------------
 
 //searches users with keyword, takes a JSON string of searchObj{ username: name }
-app.get("/search/user/", (req, res) => {
-
-    //parse JSON object store data
-    searchObj = JSON.parse(req.body.searchObjStr);
-    user = searchObj.username;
+app.get("/search/user/:KEY", (req, res) => {
+    //get data from params
+    user = req.params.KEY;
 
     console.log("searching user with key " + user);
 
     //search database and return list of users
-    Users.find({ username: new RegExp(user, "i") }).exec(function(error, results) {
+    Users.find({ Username: new RegExp(user, "i") }).exec(function(error, results) {
         var result = [];
         for (var i = 0; i < results.length; i++) {
             //add user to list of found users
@@ -156,11 +154,8 @@ app.get("/search/user/", (req, res) => {
 });
 
 //searches posts with keyword in content field, takes a JSON string of searchObj{ keyword: key }
-app.get("/search/posts/", (req, res) => {
-
-    //parse JSON object store data
-    searchObj = JSON.parse(req.body.searchObjStr);
-    key = searchObj.keyword;
+app.get("/search/posts/:KEY", (req, res) => {
+    key = req.params.KEY;
 
     console.log("searching post with key " + key);
 

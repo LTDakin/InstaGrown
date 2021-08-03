@@ -1,4 +1,5 @@
-window.onLoad =populatePosts();
+window.onLoad = populatePosts();
+window.onLoad = populateFriendsList();
 
 function postPage() {
     window.location = "../createPost.html";
@@ -95,7 +96,7 @@ function updateBio() {
     });
 }
 
-/* RUNTIME */
+/* duplicate code from a branch merge? 
 function searchUsers() {
     name = document.getElementById("searchName").innerText;
     var searchObj = {
@@ -120,10 +121,11 @@ function searchPosts() {
         data: searchObj,
         success: function(result) {}
     });
-}
+}*/
 
 function timeUpdate() {
-    setInterval(populateFriendsList, 1000);
+    //moved this to onLoad, friends can be loaded on page load
+    //setInterval(populateFriendsList, 1000);
 }
 
 function populatePosts() {
@@ -220,41 +222,41 @@ function comment(divName) {
 
 //searches for either users or posts and displays
 function search() {
-    console.log("search() being called");
-
     var option = $('#searchOption').val();
     var key = $('#searchKey').val();
 
-    console.log("Searching with option " + option + " and key " + keyword)
-
+    console.log("Searching with option " + option + " and key " + key)
+    //handle depending on the search option
     if (option == "users") {
-        //create a JSON obj
-        var searchObj = { username: key };
-        var searchObj_str = JSON.stringify(searchObj);
-
         $.ajax({
-            url: '/search/user/',
+            url: '/search/user/'+key,
             method: 'GET',
-            data: { searchObjStr: searchObj_str },
             success: function(res) {
                 var result = JSON.parse(res);
+
                 //display the users returned in middle section
-                console.log(result);
+                var displayedResult = '';
+                for(i in result){
+                    displayedResult += generateUsers(result[i]);
+                }
+                //add the html to middle of page
+                $('#postsContent').html(displayedResult);
             }
         });
     } else if (option == "posts") {
-        //create a JSON obj
-        var searchObj = { keyword: key };
-        var searchObj_str = JSON.stringify(searchObj);
-
         $.ajax({
-            url: '/search/posts/',
+            url: '/search/posts/'+key,
             method: 'GET',
             data: { searchObjStr: searchObj_str },
             success: function(res) {
                 var result = JSON.parse(res);
                 //display the posts returned in middle section
-                console.log(result);
+                var displayedResult = '';
+                for(i in result){
+                    displayedResult += generatePosts(result[i]);
+                }
+                //add the html to middle of page
+                $('#postsContent').html(displayedResult);
             }
         });
     } else {
@@ -262,6 +264,21 @@ function search() {
     }
 }
 
+//generates html code to display users
+function generateUsers(userObj){
+    var str = '';
+    str += '<div class="userTile" id='+ userObj._id +'>';
+    str += '<h3 class="userTileName">'+ userObj.Username +'</h3>';
+    str += '<p class="userTileEmail"> Contact: '+ userObj.Email +'</p>';
+    str += '<p class="userTileBio">'+ userObj.Bio +'</p>';
+    str += '</div>'
+    return str;
+}
+
+//generates html code to display posts
+function generatePosts(postObj){
+
+}
+
 // calls timeUpdate(), which updates the posts every 1 second.
 timeUpdate();
-//populateFriendsList();
