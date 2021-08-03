@@ -9,6 +9,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+const crypto = require('crypto');
 
 const app = express();
 const port = 3000;
@@ -28,7 +29,8 @@ var Schema = mongoose.Schema;
 //User schema
 var UserSchema = new Schema({
     Username: String,
-    Password: String,
+    Salt: String,
+    Hash: String,
     Bio: String,
     Email: String,
     Friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
@@ -84,15 +86,25 @@ app.post("/login/user/", (req, res) => {
         if (results.length == 0) {
             res.end(JSON.stringify({ text: 'error' }));
         } else {
+
+          //get salt and hash from db
+          var salt = results[0].Salt;
+          var iterations = 100;
+          //hash the salt and password using crypto
+          crypto.pbkdf2(pass, salt, iterations, 64, 'sha512', (err, hash) => {
+            if(err) throw err;
+            var hStr = hash.toString('base64');
+
             //check if password matches
-            if (results[0].Password != pass) {
-                res.end(JSON.stringify({ text: 'error' }));
+            if (results[0].Hash != hStr) {
+              res.end(JSON.stringify({ text: 'error' }));
             } else {
                 //add cookie for login 10 min timer
                 res.cookie("login", { username: user }, { maxAge: 900000 });
                 console.log("login successful!")
                 res.end(JSON.stringify({ text: 'ok' }));
             }
+          });
         }
     });
 });
@@ -110,19 +122,30 @@ app.post("/add/user/", (req, res) => {
 
     //Check if user already exists
     Users.find({ Username: user }).exec(function(error, results) {
-        //create the account
+        //if no other accounts with that name exist
         if (results.length == 0) {
+          //generate random string for salt, iterations
+          var salt = crypto.randomBytes(64).toString('base64');
+          var iterations = 100;
+          //hash the salt and password using crypto
+          crypto.pbkdf2(pass, salt, iterations, 64, 'sha512', (err, hash) => {
+            if(err) throw err;
+            var hStr = hash.toString('base64');
+
+            //create and save the user
             var newUser = new Users({
-                Username: user,
-                Password: pass,
-                Bio: bio,
-                Email: email,
-                Friends: [],
-                Posts: []
+              Username: user,
+              Salt: salt,
+              Hash: hStr,
+              Bio: bio,
+              Email: email,
+              Friends: [],
+              Posts: []
             });
             newUser.save(function(err) { if (err) console.log("error occured saving to db"); });
             console.log('user created!');
             res.end(JSON.stringify({ text: 'User created!' }));
+          });
         }
         //user exists, send error
         else {
@@ -350,7 +373,7 @@ app.post("/share/post", (req, res) => {
 
 });
 
-//creates a new post from the user
+//gets the posts from the server
 app.get("/get/posts", (req, res) => {
     userN = req.cookies.login.username;
     // searches for username
@@ -436,6 +459,11 @@ function authorize(req, res, next) {
         next();
     else
         res.end('unauthorized');
+}
+
+//function for hashing the password when creating user
+function hashPass(password){
+  
 }
 
 /*    RUNTIME    */
