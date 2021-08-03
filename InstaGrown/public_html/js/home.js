@@ -46,6 +46,27 @@ function populatePosts() {
             for (i in results) {
               console.log(results[i]);
               console.log(results[i].Comments);
+                displayedResult += generatePosts(results[i]);
+            }
+            postsContent.innerHTML = displayedResult;
+        }
+    });
+}
+
+/* saving in case, delete if still works
+//loads the posts into the post section div
+function populatePosts() {
+    $.ajax({
+        url: "/get/posts",
+        method: "GET",
+        success: function(result) {
+            // updates text with result from request
+            results = JSON.parse(result);
+            let displayedResult = '';
+            // iterates through each post and adds it to the result
+            for (i in results) {
+              console.log(results[i]);
+              console.log(results[i].Comments);
                 displayedResult += '<div class="postDiv" id="postDiv' + i + '"><h2 id="getTitle' + i + '">' +
                     results[i].Title + '</h2><div id="getContent' + i + '">' +
                     results[i].Content + '</div><br><br>' +
@@ -66,6 +87,7 @@ function populatePosts() {
         }
     });
 }
+*/
 
 //-------------------------------------------------------------------------------Button Functions
 
@@ -221,7 +243,7 @@ function search() {
                 //display the posts returned in middle section
                 var displayedResult = '';
                 for(i in result){
-                    displayedResult += generatePosts(result[i]);
+                    displayedResult += generatePosts(result[i], i);
                 }
                 //add the html to middle of page
                 $('#postsContent').html(displayedResult);
@@ -256,8 +278,31 @@ function generateUsers(userObj){
 }
 
 //generates html code to display posts
-function generatePosts(postObj){
-
+function generatePosts(postObj, i){
+    var str = '';
+    str += '<div class="postDiv" id="postDiv' + i + '">';
+        str += '<h2 id="getTitle' + i + '">' + postObj.Title + '</h2>';
+        str += '<div id="getContent' + i + '">' + postObj.Content + '</div>';
+            str += '<br><br>';
+            str += '<div id= "actionBar' + i + '">';
+            str += '<span id="comment' + i + '">';
+                str += '<input type = "text" name = comment id = "getCommentText' + i + '"/>';
+                str += '<input type="button"value="Comment"onclick="comment(this);" id = "commentButton' + i + '">';
+            str += '</span>';
+            str += '<span id="like' + i + '">';
+                str += '<input type="button" value="Like" onclick="like(this);">';
+                str += ' ' +  postObj.Likes.length + ' Likes';
+            str += '</span>';
+        str += '</div>';
+        str += '<br>';
+        str += '<div>Comments:</div>';
+        str += '<br>';
+        //add the comments
+        for (j in postObj.Comments) {
+            str += '<div id=commentDiv>' + postObj.Comments[j].Content+ '</div>';
+        }
+    str += '</div>';
+    return str;
 }
 
 
