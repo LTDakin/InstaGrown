@@ -1,19 +1,8 @@
+//-------------------------------------------------------------------------------Code to run on page start
 window.onLoad = populatePosts();
 window.onLoad = populateFriendsList();
 
-function postPage() {
-    window.location = "../createPost.html";
-}
-
-//Generates the html for a friend for friends list
-function createFriend(friendData) {
-    var str = '';
-    str += '<div class="friendItem">';
-    str += '<h3>' + friendData.Username + '</h3>';
-    str += '<p class="friendBio">' + friendData.Bio + '</p>';
-    str += '</div>';
-    return str;
-}
+//-------------------------------------------------------------------------------Page Loading Functions
 
 //Gets list of user's friends from db and displays in the FriendsContent
 function populateFriendsList() {
@@ -34,7 +23,7 @@ function populateFriendsList() {
                     var result = JSON.parse(res);
                     var friendsHtml = '';
                     for (var i = 0; i < result.length; i++) {
-                        friendsHtml += createFriend(result[i]);
+                        friendsHtml += generateFriend(result[i]);
                     }
                     //add friendsHtml to section
                     friendListArea.html(friendsHtml);
@@ -44,90 +33,7 @@ function populateFriendsList() {
     });
 }
 
-//adds a friend to user's friends TODO  no button exists yet
-function addFriend() {
-    //button's id is the friend to be added
-    //TODO not sure where this button is made yet
-    var name = 'Joe'; //TODO pick name off button
-
-    //create a JSON obj
-    var friendObj = { friendName: name };
-    var friendObj_str = JSON.stringify(friendObj);
-
-    $.ajax({
-        url: '/add/user/friend',
-        data: { friendObjStr: friendObj_str },
-        method: 'POST',
-        success: function(res) {
-            var result = JSON.parse(res);
-
-            //if error returned report
-            if (result.text == 'error') {
-                alert('error');
-            } else {
-                alert('friend added!');
-            }
-        }
-    });
-}
-
-function updateBio() {
-    //TODO no button exists yet to do this
-    var b = $('#newBio').val().toString();
-
-    //create a JSON obj
-    var bioObj = { bio: b };
-    var bioObj_str = JSON.stringify(bioObj);
-
-    $.ajax({
-        url: '/update/bio',
-        data: { bioObjStr: bioObj_str },
-        method: 'POST',
-        success: function(res) {
-            var result = JSON.parse(res);
-
-            //if error returned report
-            if (result.text == 'error') {
-                alert('error');
-            } else {
-                alert('bio updated!');
-            }
-        }
-    });
-}
-
-/* duplicate code from a branch merge? 
-function searchUsers() {
-    name = document.getElementById("searchName").innerText;
-    var searchObj = {
-        username: name
-    };
-    $.ajax({
-        url: "/search/user",
-        method: "GET",
-        data: searchObj,
-        success: function(result) {}
-    });
-}
-
-function searchPosts() {
-    post = document.getElementById("searchPost").innerText;
-    var searchObj = {
-        keyword: key
-    };
-    $.ajax({
-        url: "/search/posts",
-        method: "GET",
-        data: searchObj,
-        success: function(result) {}
-    });
-}*/
-
-function timeUpdate() {
-    //moved this to onLoad, friends can be loaded on page load
-    //setInterval(populateFriendsList, 1000);
-}
-
+//loads the posts into the post section div
 function populatePosts() {
     $.ajax({
         url: "/get/posts",
@@ -161,64 +67,126 @@ function populatePosts() {
     });
 }
 
+//-------------------------------------------------------------------------------Button Functions
+
+//navigates page to the create a post page
+function postPage() {
+    window.location = "../createPost.html";
+}
+
+//adds a friend to user's friends TODO  no button exists yet
+function addFriend() {
+    //button's id is the friend to be added
+    //TODO not sure where this button is made yet
+    var name = 'Joe'; //TODO pick name off button
+
+    //create a JSON obj
+    var friendObj = { friendName: name };
+    var friendObj_str = JSON.stringify(friendObj);
+
+    $.ajax({
+        url: '/add/user/friend',
+        data: { friendObjStr: friendObj_str },
+        method: 'POST',
+        success: function(res) {
+            var result = JSON.parse(res);
+
+            //if error returned report
+            if (result.text == 'error') {
+                alert('error');
+            } else {
+                alert('friend added!');
+            }
+        }
+    });
+}
+
+//updates the users bio/status in the database
+function updateBio() {
+    //TODO no button exists yet to do this
+    var b = $('#newBio').val().toString();
+
+    //create a JSON obj
+    var bioObj = { bio: b };
+    var bioObj_str = JSON.stringify(bioObj);
+
+    $.ajax({
+        url: '/update/bio',
+        data: { bioObjStr: bioObj_str },
+        method: 'POST',
+        success: function(res) {
+            var result = JSON.parse(res);
+
+            //if error returned report
+            if (result.text == 'error') {
+                alert('error');
+            } else {
+                alert('bio updated!');
+            }
+        }
+    });
+}
+
+//adds a like to a post
 function like(divName){
-  var parent1 = divName.parentNode; //span
-  var parent2 = parent1.parentNode; //actionBar div
-  var parent = parent2.parentNode; // actual post div
-  //console.log(parent);
-  var divArray = parent.children;
-  console.log(divArray);
+    var parent1 = divName.parentNode; //span
+    var parent2 = parent1.parentNode; //actionBar div
+    var parent = parent2.parentNode; // actual post div
+    //console.log(parent);
+    var divArray = parent.children;
+    console.log(divArray);
+  
+    // gets title
+    ti = divArray[0].id;
+    t = document.getElementById(ti).innerText;
+  
+    // gets content
+    co = divArray[1].id;
+    c = document.getElementById(co).innerText;
+  
+    $.ajax({
+        url: "/like/post/" + t +"/" + c,
+        method: "GET",
+        success: function(result) {
+          if (result != "GOOD") {
+            //alert("You cannot like a post more than once!");
+            alert(result);
+          } else {
+            alert("Post liked!");
+            populatePosts();
+          }
+        }
+    });
+  }
 
-  // gets title
-  ti = divArray[0].id;
-  t = document.getElementById(ti).innerText;
-
-  // gets content
-  co = divArray[1].id;
-  c = document.getElementById(co).innerText;
-
-  $.ajax({
-      url: "/like/post/" + t +"/" + c,
+//adds a comment to a post
+function comment(divName) {
+    var parent1 = divName.parentNode; //span
+    var parent2 = parent1.parentNode; //actionBar div
+    var parent = parent2.parentNode; // actual post div
+    var divArray = parent.children;
+    ti = divArray[0].id;
+    t = document.getElementById(ti).innerText;
+  
+    co = divArray[1].id;
+    c = document.getElementById(co).innerText;
+  
+    var commentArray = parent1.children;
+    ct = commentArray[0].id;
+    newCommentText = document.getElementById(ct).value;
+    $.ajax({
+      url: "/comment/post/" + t + "/" + c + "/" + newCommentText,
       method: "GET",
       success: function(result) {
         if (result != "GOOD") {
-          //alert("You cannot like a post more than once!");
-          alert(result);
+          alert("ERROR!");
         } else {
-          alert("Post liked!");
+          alert("Comment posted!");
           populatePosts();
         }
       }
-  });
-}
-
-function comment(divName) {
-  var parent1 = divName.parentNode; //span
-  var parent2 = parent1.parentNode; //actionBar div
-  var parent = parent2.parentNode; // actual post div
-  var divArray = parent.children;
-  ti = divArray[0].id;
-  t = document.getElementById(ti).innerText;
-
-  co = divArray[1].id;
-  c = document.getElementById(co).innerText;
-
-  var commentArray = parent1.children;
-  ct = commentArray[0].id;
-  newCommentText = document.getElementById(ct).value;
-  $.ajax({
-    url: "/comment/post/" + t + "/" + c + "/" + newCommentText,
-    method: "GET",
-    success: function(result) {
-      if (result != "GOOD") {
-        alert("ERROR!");
-      } else {
-        alert("Comment posted!");
-        populatePosts();
-      }
-    }
-  });
-}
+    });
+  }
 
 //searches for either users or posts and displays
 function search() {
@@ -264,6 +232,18 @@ function search() {
     }
 }
 
+//-------------------------------------------------------------------------------Helper Functions
+
+//Generates the html for a friend for friends list
+function generateFriend(friendData) {
+    var str = '';
+    str += '<div class="friendItem">';
+    str += '<h3>' + friendData.Username + '</h3>';
+    str += '<p class="friendBio">' + friendData.Bio + '</p>';
+    str += '</div>';
+    return str;
+}
+
 //generates html code to display users
 function generateUsers(userObj){
     var str = '';
@@ -280,5 +260,4 @@ function generatePosts(postObj){
 
 }
 
-// calls timeUpdate(), which updates the posts every 1 second.
-timeUpdate();
+

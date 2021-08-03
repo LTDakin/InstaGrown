@@ -89,7 +89,6 @@ app.post("/login/user/", (req, res) => {
                 res.end(JSON.stringify({ text: 'error' }));
             } else {
                 //add cookie for login 10 min timer
-                console.log("adding cookies " + user);
                 res.cookie("login", { username: user }, { maxAge: 900000 });
                 console.log("login successful!")
                 res.end(JSON.stringify({ text: 'ok' }));
@@ -139,8 +138,6 @@ app.post("/add/user/", (req, res) => {
 app.get("/search/user/:KEY", (req, res) => {
     //get data from params
     user = req.params.KEY;
-
-    console.log("searching user with key " + user);
 
     //search database and return list of users
     Users.find({ Username: new RegExp(user, "i") }).exec(function(error, results) {
@@ -434,7 +431,6 @@ app.get('/get/username/', (req, res) => {
 /*    FUNCTIONS   */
 function authorize(req, res, next) {
     //update to a more secure salting and hashing method with session keys
-    console.log(req.cookies);
     if (req.cookies.login.username != undefined)
         next();
     else
