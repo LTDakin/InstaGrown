@@ -16,28 +16,20 @@ body {
 	padding-left:10px;
 }
 
-#headerTitle{
-	font-size: 50px;
-	margin-bottom: 0px;
-}
-
 #siteContent {
 	position: fixed;
 	bottom: 0px;
 	left: 0px;
-	width: 100%;
+	width: 95%;
 	height: 80%;
 	padding-left:10px;
 }
 
 #headerTitle{
 	font-size: 50px;
+	margin-bottom: 0px;
 }
 
 h1 {
 	color: rgb(168, 124, 66);
-}
-
-.formInput{
-	margin: 10px;
 }
