@@ -372,7 +372,7 @@ app.post("/like/comment", (req, res) => {
 //shares another user's post as a new post from the current user
 app.get("/share/post/:T/:C", (req, res) => {
   userN = req.cookies.login.username;
-  title =req.params.T;
+  title ="Sharing " + "'"+req.params.T+"'";
   content = req.params.C;
   Users.find({ Username: userN }).exec(function(error, results) {
       if (results.length == 1) {
