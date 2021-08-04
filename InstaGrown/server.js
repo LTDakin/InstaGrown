@@ -400,7 +400,8 @@ app.get("/share/post/:T/:C", (req, res) => {
 //gets the posts from the server
 app.get("/get/posts", (req, res) => {
   Posts.find({}).exec(function(error, results) {
-      res.end(JSON.stringify(results, null, 4));
+    results.reverse();
+    res.end(JSON.stringify(results, null, 4));
   });
   /*
     userN = req.cookies.login.username;
