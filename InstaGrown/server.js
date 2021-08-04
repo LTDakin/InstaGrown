@@ -177,8 +177,6 @@ app.get("/search/user/:KEY", (req, res) => {
 app.get("/search/posts/:KEY", (req, res) => {
     key = req.params.KEY;
 
-    console.log("searching post with key " + key);
-
     //search database and return list of posts whose content contains key
     Posts.find({ Content: new RegExp(key, "i") }).exec(function(error, results) {
         var result = [];
@@ -250,9 +248,19 @@ function updateComments(t, c, u){
   });
 }
 
-//returns a user's profile
-app.get("/get/user/profile", (req, res) => {
-
+//returns a user's bio
+app.get("/get/user/bio", (req, res) => {
+  user = req.cookies.login.username;
+  //look up the user and if exists, return the bio
+  Users.find({Username: user}).exec(function(err, results){
+    if(results.length == 0){
+      console.log("username from cookies " + user + " not found in database");
+      res.end(JSON.stringify({ text: 'error' }));
+    } else {
+      userData = results[0];
+      res.end(JSON.stringify({ bio: userData.Bio }));
+    }
+  })
 });
 
 //returns a list of user's friends
@@ -284,7 +292,6 @@ app.post("/add/user/friend", (req, res) => {
     //parse JSON object store data
     var friendObj = JSON.parse(req.body.friendObjStr);
     var id = friendObj.friendName;
-    console.log("id of user trying to add " + id);
 
     //get user from cookies
     var user = req.cookies.login.username;
@@ -323,7 +330,6 @@ app.get("/like/post/:TITLE/:CONTENT", (req, res) => {
   Posts.find({Title:t, Content: c}).exec(function(error, results) {
     if (results.length != 0) {
       if (results[0].Likes.includes(userN)) {
-        console.log(results[0]);
         res.send("You Cannot Like a Post More than Once!");
       } else {
         //adds username to post like array
@@ -419,10 +425,8 @@ app.get("/get/posts", (req, res) => {
 
 app.post("/create/post", (req, res) => {
     userN = req.cookies.login.username;
-    console.log("test1");
     Users.find({ Username: userN }).exec(function(error, results) {
         if (results.length == 1) {
-          console.log("test2");
             // creates and saves post
             let postString = JSON.parse(req.body.Post);
             var newPost = new Posts(postString);
@@ -435,7 +439,6 @@ app.post("/create/post", (req, res) => {
             res.end("GOOD");
             // if no username matches, send no such username
         } else {
-            console.log("test3");
             res.end("No such username");
         }
     });
@@ -452,7 +455,7 @@ app.post("/update/bio", (req, res) => {
     var bio = bioObj.bio;
 
     //Search for user to update their bio
-    Users.find({ username: user }).exec(function(error, results) {
+    Users.find({ Username: user }).exec(function(error, results) {
         if (results.length == 0) {
             console.log("username from cookies " + user + " not found in database");
             res.end(JSON.stringify({ text: 'error' }));

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<!--
+  Author: Lloyd Dakin
+
+  Contains the html for the home page of the Final Project.
+-->
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>InstaGrow Profile</title>
+    <link rel="stylesheet" type="text/css" href="./css/profile.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/js/profile.js"></script>
+</head>
+
+<body>
+    <div id="siteContent">
+        <div class="area" id="usernameArea">
+          <h1 id="username">Test User</h1>
+          <button id="homeButton" onclick="homePage()">Home</button>
+        </div>
+        <div class="area" id="bioArea">
+          <h1>Bio</h1>
+          <h4 id="bio">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam animi, quidem numquam quas reiciendis blanditiis recusandae qui earum a nostrum id dolore sed natus nam deleniti corrupti error. Animi, nihil.</h4>
+          <button onclick="updateBio()">Update</button>
+        </div>
+        <div class="area" id="friendsArea">
+          <h1 id="friendsTitle">Friends</h1>
+          <div id="friendsTileArea"></div>
+        </div>
+    </div>
+</body>
+
+</html>

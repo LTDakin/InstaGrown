@@ -58,6 +58,11 @@ function postPage() {
     window.location = "../createPost.html";
 }
 
+//navigates page to the profile page
+function profilePage() {
+    window.location = "../profile.html";
+}
+
 //adds a friend to user's friends TODO  no button exists yet
 function addFriend(id) {
     //get button's id, id is the friend to be added
