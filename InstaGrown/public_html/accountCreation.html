@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 
 <!--
-  Author: Nicholas Eng
+  Authors: Nicholas Eng, Lloyd Dakin
 
-  Contains the html for the home page of the Final Project.
+  Contains the html for the account creation page of the Final Project.
+  Sets up a form asking the user for information to make their account.
 -->
 
 <html lang="en">
@@ -25,18 +26,18 @@
         <div class="area" id="siteContent">
             <h1>Info</h1>
             <div class="formInput">
-                <label for="userName">Username: </label>
-                <input type="text" name=userName id="userNameInput" />
+                <label for="userNameInput">Username: </label>
+                <input type="text" name=userNameInput id="userNameInput" />
             </div>
 
             <div class="formInput">
-                <label for="password">Password: </label>
-                <input type="password" name=password id="passwordInput" />
+                <label for="passwordInput">Password: </label>
+                <input type="password" name=passwordInput id="passwordInput" />
             </div>
 
             <div class="formInput">
-                <label for="email">Email:   </label>
-                <input type="email" name=email id="emailInput" />
+                <label for="emailInput">Email:   </label>
+                <input type="email" name=emailInput id="emailInput" />
             </div>
 
             <div class="formInput">
@@ -49,7 +50,7 @@
             </div>
         </div>
     </div>
-    <button id="helpButton"onclick="window.location = '../help.html';">Help</button>
+    <button id="helpButton" onclick="window.location = '../help.html';">Help</button>
 </body>
 
 </html>
