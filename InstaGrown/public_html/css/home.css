@@ -139,3 +139,11 @@ button {
 input{
 	border: none;
 }
+
+#friendsList{
+	overflow-y: scroll;
+}
+
+#siteContent {
+	margin-bottom: 10px;
+}
