@@ -6,29 +6,33 @@
 
 /*    FUNCTIONS    */
 
-//sends ajax request to server to add a new account, if account already exists
+//takes form information and sends ajax request to server to add a new account.
+//if account already exists, user will see an alert on the screen
 function createUser() {
-    var user = $('#userNameInput').val();
-    var pass = $('#passwordInput').val();
-    var em = $('#emailInput').val();
-    var b = $('#bio').val();
+  // gets information
+  var user = $('#userNameInput').val();
+  var pass = $('#passwordInput').val();
+  var em = $('#emailInput').val();
+  var b = $('#bio').val();
 
-    //create a JSON obj
-    var userObj = { username: user, password: pass, email: em, bio: b };
-    var userObj_str = JSON.stringify(userObj);
+  //create a JSON obj
+  var userObj = { username: user, password: pass, email: em, bio: b };
+  var userObj_str = JSON.stringify(userObj);
 
-    $.ajax({
-        url: '/add/user/',
-        data: { userObjStr: userObj_str },
-        method: 'POST',
-        success: function(res) {
-            //after sucess send back to login
-            var result = JSON.parse(res);
-            if (result.text == 'error') {
-                alert('Username already taken!');
-            } else {
-                window.location = '/index.html';
-            }
-        }
-    });
+  // sends request
+  $.ajax({
+    url: '/add/user/',
+    data: { userObjStr: userObj_str },
+    method: 'POST',
+    success: function(res) {
+      //after sucess send back to login
+      var result = JSON.parse(res);
+      if (result.text == 'error') {
+        alert('Username already taken!');
+      } else {
+        // if success, redirects to login page
+        window.location = '/index.html';
+      }
+    }
+  });
 }
