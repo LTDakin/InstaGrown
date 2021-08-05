@@ -1,35 +1,33 @@
 body {
-	background-color: rgb(199, 213, 206);
-	padding: 0px;
-	margin: 0px;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
 
+.area{
+  border-radius: 10px;
+  background: #e0e0e0;
+  box-shadow:  20px 20px 60px #bebebe,
+               -20px -20px 60px #ffffff;
+  padding: 30px;
+  margin-bottom: 45px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 #siteHeader{
-	position: fixed;
-	top: 0px;
-	left: 0px;
-	width: 100%;
-	height: 20%;
 	background-color: rgb(57, 100, 84);
-	margin:0px;
-	padding-left:10px;
-}
+	margin: 20px;
+	padding-left: 10px;
 
-#siteContent {
-	position: fixed;
-	bottom: 0px;
-	left: 0px;
-	width: 95%;
-	height: 80%;
-	padding-left:10px;
 }
 
 #headerTitle{
 	font-size: 50px;
 	margin-bottom: 0px;
+	color: #e0e0e0;
 }
 
 h1 {
-	color: rgb(168, 124, 66);
+	color: rgb(0, 0, 0);
 }

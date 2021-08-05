@@ -1,28 +1,46 @@
 body {
-	background-color: rgb(199, 213, 206);
+	background-color: #e0e0e0;
 	padding: 0px;
 	margin: 0px;
+	box-sizing: border-box;
+}
 
+.area{
+  border-radius: 10px;
+  background: #e0e0e0;
+  box-shadow:  20px 20px 60px #bebebe,
+               -20px -20px 60px #ffffff;
+  padding: 30px;
+	margin-left: 20px;
+  margin-right: 20px;
+}
+
+.toolbar{
+	position: fixed;
+	left: 0%;
+	height: 80%;
+	width: 25%;
+}
+
+.content{
+	position: fixed;
+	right: 0%;
+	height: 80%;
+	width: 75%;
 }
 
 #siteHeader{
-	position: fixed;
-	top: 0px;
-	left: 0px;
-	width: 100%;
-	height: 20%;
-	background-color: rgb(57, 100, 84);
-	margin:0px;
-	padding-left:10px;
-}
-
-#siteContent {
-	position: fixed;
-	bottom: 0px;
-	left: 0px;
-	width: 100%;
-	height: 80%;
-	padding-left:10px;
+	background-image: url('../img/succulent_row.png');
+    background-repeat: no-repeat;
+    background-position: left;
+		background-size: 50%;
+	font-family: Courier, monospace;
+	text-align: right;
+	padding: 30px;
+	background-color: rgb(218, 161, 55);
+  color: #eeecec;
+	margin-top: 10px;
+	margin-bottom: 20px;
 }
 
 #headerTitle{
@@ -30,52 +48,25 @@ body {
 	margin-bottom: 0px;
 }
 
-h1 {
-	color: rgb(168, 124, 66);
-}
-
 #friendsList{
-	position: fixed;
-	bottom: 0px;
-	left: 0px;
-	width: 20%;
-	height: 80%;
-	background-color: rgb(199, 213, 206);
+	height: 85%;
+	margin-top: 10px;
+	background-color: #e0e0e0;
 }
 
 #friendsTitle{
-	color: rgb(168, 124, 66);
-	background-color: rgb(57, 100, 84);
+	color: black;
 	text-align: center;
 	margin: 10px;
 	font-size: 30px;
+	font-family: Arial, Helvetica, sans-serif;
 }
 
 #posts{
-	position: fixed;
-	bottom: 0px;
-	left: 20%;
-	width: 50%;
-	height: 80%;
-	background-color: rgb(110, 163, 130);
+	height: 85%;
+	margin-top: 10px;
+	background-color: #e0e0e0;
 	overflow-y: scroll;
-}
-
-#postsTitle{
-	color: rgb(168, 124, 66);
-	background-color: rgb(57, 100, 84);
-	text-align: center;
-	margin: 10px;
-	font-size: 30px;
-}
-
-#status{
-	position: fixed;
-	bottom: 0px;
-	left: 70%;
-	width: 30%;
-	height: 80%;
-	background-color: rgb(199, 213, 206);;
 }
 
 #statusTitle{
@@ -86,21 +77,26 @@ h1 {
 	font-size: 30px;
 }
 
-#postButton {
+#helpButton{
 	position: fixed;
-	right: 10px;
+	bottom: 0;
+	right: 0;
+	margin: 20px;
 }
 
 .postDiv{
+	background: #e0e0e0;
+  box-shadow:  20px 20px 60px #bebebe,
+               -20px -20px 60px #ffffff;
+
 	padding-top: 10px;
 	padding-bottom: 10px;
 	border-radius: 12px;
-	background-color: white;
-	width: 75%;
+	width: 80%;
 	text-align: center;
 	margin-left: auto;
 	margin-right: auto;
-	margin-top: 10px;
+	margin-top: 30px;
 }
 
 #like {
@@ -120,12 +116,25 @@ h1 {
 }
 
 .friendTile{
-	width: 75%;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 10px;
-	border: none;
+	margin-bottom: 10px;
+	margin-right: 10px;
+	border-radius: 40px;
+	background: rgb(56, 56, 56);
+	color: #e0e0e0;
+	height: 100px;
+	padding: 30px;
+	float: left;
+}
+
+button {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #2d5c29;
+  color: rgb(226, 226, 226);
+  padding: 10px;
+  border: none;
   border-radius: 12px;
-  background-color: white;
-	padding: 20px;
+}
+
+input{
+	border: none;
 }

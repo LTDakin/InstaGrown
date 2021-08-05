@@ -17,9 +17,8 @@
 </head>
 
 <body>
-    <div id="siteHeader">
-        <h1 id="headerTitle">InstaGrow</h1>
-        <button id="helpButton"onclick="window.location = '../help.html';">Help</button>
+    <div class="area" id="siteHeader">
+        <h1 id="headerTitle">InstaGrow.</h1>
         <span>
             <select name="searchOption" id="searchOption">
                 <option value="users">users</option>
@@ -29,25 +28,25 @@
             <button id="searchButton" onclick="search();">Search</button>
         </span>
         <span id="postSpan">
-          <button id="postButton"onclick="postPage();">Create Post</button>
           <button id="profileButton"onclick="profilePage();">Profile</button>
         </span>
     </div>
 
     <div id="siteContent">
-        <div id="friendsList">
-            <div id="friendsTitle">Friends</div>
-            <div id="friendsContent"></div>
+        <div class = "toolbar">
+            <div  class="area" id="friendsList">
+                <h1 id="friendsTitle">Friends</h1>
+                <div id="friendsContent"></div>
+            </div>
         </div>
-        <div id="posts">
-            <div id="postsTitle">Posts</div>
-            <div id="postsContent"></div>
-        </div>
-        <div id="status">
-            <div id="statusTitle">About:</div>
-            <div id="statusContent"></div>
+        <div class="content">
+            <div  class="area" id="posts">
+                <button id="postButton"onclick="postPage();">Create Post</button>
+                <div id="postsContent"></div>
+            </div>
         </div>
     </div>
+    <button id="helpButton" onclick="window.location = '../help.html';">Help</button>
 </body>
 
 </html>

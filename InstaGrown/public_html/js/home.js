@@ -277,7 +277,6 @@ function generateFriend(friendData) {
     str += '<div class="friendTile">';
     str += '<h3 class="friendTileName">' + friendData.Username + '</h3>';
     str += '<p class="friendTileBio">' + friendData.Bio + '</p>';
-    str += '<button class="msgFriendButton" id="'+friendData._id+'" onclick="msgFriend(this.id)">Message</button>';
     str += '</div>';
     return str;
 }

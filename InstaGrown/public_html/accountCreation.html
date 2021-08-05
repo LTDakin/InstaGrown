@@ -17,36 +17,39 @@
 </head>
 
 <body>
-    <div id="siteHeader">
-        <h1 id="headerTitle">InstaGrow</h1>
-        <button id="helpButton"onclick="window.location = '../help.html';">Help</button>
+    <div class="area" id="siteHeader">
+        <h1 id="headerTitle">Create an Account</h1>
+        <h3>Join other plant enthusiasts!</h3>
     </div>
+    <div class="wrapper">
+        <div class="area" id="siteContent">
+            <h1>Info</h1>
+            <div class="formInput">
+                <label for="userName">Username: </label>
+                <input type="text" name=userName id="userNameInput" />
+            </div>
 
-    <div id="siteContent">
-        <div class="formInput">
-            <label for="userName">Username: </label>
-            <input type="text" name=userName id="userNameInput" />
-        </div>
+            <div class="formInput">
+                <label for="password">Password: </label>
+                <input type="password" name=password id="passwordInput" />
+            </div>
 
-        <div class="formInput">
-            <label for="password">Password: </label>
-            <input type="password" name=password id="passwordInput" />
-        </div>
+            <div class="formInput">
+                <label for="email">Email:   </label>
+                <input type="email" name=email id="emailInput" />
+            </div>
 
-        <div class="formInput">
-            <label for="email">Email: </label>
-            <input type="email" name=email id="emailInput" />
-        </div>
+            <div class="formInput">
+                <h2>Status</h2>
+                <textarea name="bio" id="bio" rows="15" cols="30"></textarea>
+            </div>
 
-        <div class="formInput">
-            <div>Enter bio here: </div>
-            <textarea name="bio" id="bio" rows="5"></textarea>
-        </div>
-
-        <div class="formInput">
-            <input type="button" Value="Create Account" class="submit" onclick="createUser();" />
+            <div class="formInput">
+                <button onclick="createUser();">Create</button>
+            </div>
         </div>
     </div>
+    <button id="helpButton"onclick="window.location = '../help.html';">Help</button>
 </body>
 
 </html>

@@ -3,10 +3,9 @@ body {
     background-image: url('../img/plant_vase_white_background.jpg');
     background-repeat: no-repeat;
     background-color: rgb(235, 235, 235);
-    padding: 0px;
-    margin: 0px;
     text-align: right;
     font-family: Courier, monospace;
+    box-sizing: border-box;
 }
 
 #siteHeader {
@@ -28,24 +27,31 @@ body {
 }
 
 #headerTitle {
-    font-size: 70px;
-    margin-right: 20%;
+    font-size: 60px;
+    position: fixed;
+    right: 10%;
+    background-color: rgb(218, 161, 55);
+    color: #ffffff;
+    width: 360px;
+    border-radius: 10px;
+    box-shadow:  20px 20px 60px #bebebe,
+               -20px -20px 60px #ffffff;
+    padding: 30px;
 }
 
 #logIn {
-    background-color: #18181849;
+    position: fixed;
+    right: 10%;
+    border-radius: 10px;
+    background: #e0e0e0;
+    box-shadow:  20px 20px 60px #bebebe,
+               -20px -20px 60px #ffffff;
     width: 400px;
     padding: 10px;
-    float: right;
-    margin-right: 20%;
     margin-top: 40px;
     border: none;
-    border-radius: 12px;
-    color: white;
-}
-
-#headerTitle {
     color: black;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #errorLogin {
@@ -54,11 +60,16 @@ body {
 }
 
 .customButton {
-    background-color: #1f1f1f;
+    background-color: #2d5c29;
     color: rgb(226, 226, 226);
     padding: 10px;
     border: none;
     border-radius: 12px;
     display: block;
     margin: 0px auto;
+    margin-bottom: 10px;
+}
+
+input{
+    border: none;
 }
