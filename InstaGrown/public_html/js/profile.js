@@ -35,6 +35,7 @@ function updateBio(){
 function populateProfile(){
   populateUsername();
   populateBio();
+  populatePicture();
   populateFriendsList();
 }
 
@@ -60,6 +61,20 @@ function populateBio(){
       var result = JSON.parse(res);
       var bio = result.bio;
       $('#bio').text(bio);
+    }
+  });
+}
+
+//gets user's frofile picture and displays on html
+function populatePicture(){
+  $.ajax({
+    url: '/get/user/pfp',
+    method: 'GET',
+    success: function(res) {
+      var result = JSON.parse(res);
+      var picture = result.picture;
+      console.log(picture);
+      document.getElementById("pfp").src = picture;
     }
   });
 }

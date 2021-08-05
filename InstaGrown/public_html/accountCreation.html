@@ -17,36 +17,40 @@
 </head>
 
 <body>
-    <div id="siteHeader">
-        <h1 id="headerTitle">InstaGrow</h1>
-        <button id="helpButton"onclick="window.location = '../help.html';">Help</button>
-    </div>
+  <div id="siteHeader">
+    <h1 id="headerTitle">InstaGrow</h1>
+    <button id="helpButton"onclick="window.location = '../help.html';">Help</button>
+  </div>
+  <div id="siteContent">
+    <form enctype="multipart/form-data" action="/add/user" method="post">
+      <div class="formInput">
+          <label for="userName">Username: </label>
+          <input type="text" name=userName id="userNameInput" />
+      </div>
+      <div class="formInput">
+          <label for="password">Password: </label>
+          <input type="password" name=password id="passwordInput" />
+      </div>
 
-    <div id="siteContent">
-        <div class="formInput">
-            <label for="userName">Username: </label>
-            <input type="text" name=userName id="userNameInput" />
-        </div>
+      <div class="formInput">
+          <label for="email">Email: </label>
+          <input type="email" name=email id="emailInput" />
+      </div>
 
-        <div class="formInput">
-            <label for="password">Password: </label>
-            <input type="password" name=password id="passwordInput" />
-        </div>
+      <div class="formInput">
+          <div>Enter bio here: </div>
+          <textarea name="bio" id="bio" rows="5"></textarea>
+      </div>
 
-        <div class="formInput">
-            <label for="email">Email: </label>
-            <input type="email" name=email id="emailInput" />
-        </div>
+      <div class="formInput">
+          <div>Select profile picture: </div>
+          <input type="file" accept="image/*" name="photo" id = "pfp">
+      </div>
 
-        <div class="formInput">
-            <div>Enter bio here: </div>
-            <textarea name="bio" id="bio" rows="5"></textarea>
-        </div>
-
-        <div class="formInput">
-            <input type="button" Value="Create Account" class="submit" onclick="createUser();" />
-        </div>
-    </div>
+      <div class="formInput">
+          <input type="submit" Value="Create Account"/>
+      </div>
+    </form>
+  </div>
 </body>
-
 </html>

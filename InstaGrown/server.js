@@ -10,6 +10,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
+const multer = require('multer');
+const upload = multer({dest: __dirname + '/uploads/images'});
 
 const app = express();
 const port = 3000;
@@ -33,6 +35,7 @@ var UserSchema = new Schema({
     Hash: String,
     Bio: String,
     Email: String,
+    Picture: String,
     Friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     //Posts: [{ type: Schema.Types.ObjectID, ref: 'Post' }]
     Friends: [],
@@ -111,18 +114,31 @@ app.post("/login/user/", (req, res) => {
 
 //accountCreation.html requests-----------------------------------------------------------
 
+app.post('/upload', upload.single('photo'), (req, res) => {
+    if(req.file) {
+        console.log(req);
+        res.json(req.file);
+    }
+    else throw 'image error';
+});
+
 //adding a new user, takes UserObjectJSONstr and gets username and password
-app.post("/add/user/", (req, res) => {
+app.post("/add/user/", upload.single('photo'), (req, res) => {
+  console.log("test");
+  console.log(req.file);
     //parse JSON object store data
-    var userObj = JSON.parse(req.body.userObjStr);
-    var user = userObj.username;
-    var pass = userObj.password;
-    var bio = userObj.bio;
-    var email = userObj.email;
+    console.log(req.body);
+    //var userObj = JSON.parse(req.body);
+    var user = req.body.userName;
+    var pass = req.body.password;
+    var bio = req.body.bio;
+    var email = req.body.email;
+    var pfp =  req.file.path;
 
     //Check if user already exists
     Users.find({ Username: user }).exec(function(error, results) {
         //if no other accounts with that name exist
+
         if (results.length == 0) {
           //generate random string for salt, iterations
           var salt = crypto.randomBytes(64).toString('base64');
@@ -138,12 +154,14 @@ app.post("/add/user/", (req, res) => {
               Salt: salt,
               Hash: hStr,
               Bio: bio,
+              Picture: pfp,
               Email: email,
               Friends: [],
               Posts: []
             });
             newUser.save(function(err) { if (err) console.log("error occured saving to db"); });
             console.log('user created!');
+            console.log(newUser);
             res.end(JSON.stringify({ text: 'User created!' }));
           });
         }
@@ -259,6 +277,21 @@ app.get("/get/user/bio", (req, res) => {
     } else {
       userData = results[0];
       res.end(JSON.stringify({ bio: userData.Bio }));
+    }
+  })
+});
+
+//returns a user's picture path
+app.get("/get/user/pfp", (req, res) => {
+  user = req.cookies.login.username;
+  //look up the user and if exists, return the bio
+  Users.find({Username: user}).exec(function(err, results){
+    if(results.length == 0){
+      console.log("username from cookies " + user + " not found in database");
+      res.end(JSON.stringify({ text: 'error' }));
+    } else {
+      userData = results[0].Picture;
+      res.end(JSON.stringify({ picture: userData }));
     }
   })
 });

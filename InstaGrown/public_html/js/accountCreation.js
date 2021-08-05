@@ -12,9 +12,12 @@ function createUser() {
     var pass = $('#passwordInput').val();
     var em = $('#emailInput').val();
     var b = $('#bio').val();
+    //var pfp = $('#pfp').val();
+    //console.log(pfp);
 
     //create a JSON obj
     var userObj = { username: user, password: pass, email: em, bio: b };
+    //    var userObj = { username: user, password: pass, email: em, bio: b , picture: pfp};
     var userObj_str = JSON.stringify(userObj);
 
     $.ajax({
