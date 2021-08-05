@@ -1,3 +1,9 @@
+/*
+  Author: Lloyd Dakin
+  Desc: Css for the post creation page. Changes color, layout, etc to give
+	the website a visual theme
+*/
+
 body {
 	background-color: rgb(199, 213, 206);
 	padding: 0px;
