@@ -17,23 +17,23 @@
     <script src="js/createPost.js"></script>
   </head>
   <body>
-    <div id="siteHeader">
-  		<h1 id="headerTitle">InstaGrow</h1>
+    <div class="area" id="siteHeader">
+  		<h1 id="headerTitle">Create a Post</h1>
       <button id="helpButton"onclick="window.location = '../help.html';">Help</button>
+    </div>
+    <div class="area" id="siteContent">
+      <h1>Post Info</h1>
+      <div class="formInput">
+        <label for="title">Title: </label>
+        <input type = "text" name = title id = "titleText"/>
       </div>
-      <div id="siteContent">
-        <div class="formInput">
-          <label for="title">Title: </label>
-          <input type = "text" name = title id = "titleText"/>
-        </div>
-        <div class="formInput">
-    			<div>Enter post here: </div>
-    			<textarea name="post" id = "postText" rows="10"></textarea>
-    		</div>
-      	<div class="formInput">
-      		<input type = "submit" Value = "Create Post" class = "submit"
-          onclick="createPost();"/>
-      	</div>
+      <div class="formInput">
+        <div>Enter post here: </div>
+        <textarea name="post" id = "postText" rows="10"></textarea>
       </div>
+      <div class="formInput">
+        <button onclick="createPost();"/>Create</button>
+      </div>
+    </div>
   </body>
 </html>
