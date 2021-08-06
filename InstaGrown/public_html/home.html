@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 
 <!--
-  Author: Nicholas Eng
+  Authors: Nicholas Eng, Lloyd Dakin
 
   Contains the html for the home page of the Final Project.
+  Contains a site header, search bar for users/posts, a list of
+  friends, and the posts that users have submitted to Instagrown
 -->
 
 <html lang="en">
@@ -24,11 +26,11 @@
                 <option value="users">users</option>
                 <option value="posts">posts</option>
             </select>
-            <input id="searchKey" type="text" value=""></input>
+            <input id="searchKey" type="text" value=""/>
             <button id="searchButton" onclick="search();">Search</button>
         </span>
         <span id="postSpan">
-          <button id="profileButton"onclick="profilePage();">Profile</button>
+          <button id="profileButton" onclick="profilePage();">Profile</button>
         </span>
     </div>
 
@@ -41,7 +43,7 @@
         </div>
         <div class="content">
             <div  class="area" id="posts">
-                <button id="postButton"onclick="postPage();">Create Post</button>
+                <button id="postButton" onclick="postPage();">Create Post</button>
                 <div id="postsContent"></div>
             </div>
         </div>

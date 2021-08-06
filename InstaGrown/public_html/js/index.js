@@ -6,7 +6,8 @@
 
 /* FUNCTIONS */
 
-//sends ajax request to server to add a new account, if account already exists denys
+// sends ajax request to server to login with the given user.
+// redirects to home.html if successful, displays error if invalid login
 function login() {
     var user = $('#username').val().toString();
     var pass = $('#password').val().toString();
@@ -15,6 +16,7 @@ function login() {
     var userObj = { username: user, password: pass };
     var userObj_str = JSON.stringify(userObj);
 
+    // creates request
     $.ajax({
         url: '/login/user/',
         data: { userObjStr: userObj_str },
@@ -28,12 +30,14 @@ function login() {
                 //login correct, go to home page, save session cookie
                 console.log("correct login");
                 $('#errorLogin').css('visibility', 'hidden');
+                // redirects
                 window.location = '/home.html';
             }
         }
     });
 }
 
+// changes window to the accountCreation.html page
 function createAccountPage() {
     window.location = "../accountCreation.html";
 }

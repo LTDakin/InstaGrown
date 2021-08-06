@@ -1,3 +1,9 @@
+/*
+  Author: Lloyd Dakin
+  Desc: Css for the index(login) page. Changes color, layout, etc to give
+	the website a visual theme
+*/
+
 body {
     /*background-color: rgb(199, 213, 206);*/
     background-image: url('../img/plant_vase_white_background.jpg');
